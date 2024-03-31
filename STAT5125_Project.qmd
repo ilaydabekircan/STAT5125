@@ -7,6 +7,9 @@ editor: visual
 ```{r}
 library(rvest)     
 library(tidyverse)
+library(visdat)
+library(tidyr)
+library(janitor)
 ```
 
 ```{r}
@@ -17,6 +20,23 @@ data1<-temp[[3]] |>
   data.frame() |>
   slice(-1)
 
+
+data1$X2022estimate <- str_replace_all(data1$X2022estimate, ",", "")
+data1$X2020census <- str_replace_all(data1$X2020census, ",", "")
+data1$X2020.density<- str_replace_all(data1$X2020.density, ",", "")
+
+data1$X2020.land.area<- str_replace_all(data1$X2020.land.area, ",", "")
+data1$X2020.land.area.1<- str_replace_all(data1$X2020.land.area.1, ",", "")
+
+data1$X2020.density.1<- str_replace_all(data1$X2020.density.1, ",", "")
+data1$X2020census <- str_replace_all(data1$X2020census, ",", "")
+data1$X2022estimate <- as.numeric(data1$X2022estimate)
+data1$X2020census <- as.numeric(data1$X2020census)
+data1$X2020.land.area <- as.numeric(data1$X2020.land.area)
+data1$X2020.land.area.1 <- as.numeric(data1$X2020.land.area.1)
+
+data1$X2020.density <- as.numeric(data1$X2020.density)
+data1$X2020.density.1 <- as.numeric(data1$X2020.density.1)
 data1$City <- str_replace_all(data1$City, "\\[.*\\]", "")
 
 ```
@@ -32,6 +52,9 @@ data2$City <- str_replace_all(data2$City, "[*\\[\\]]", "")
 
 #Usable variable: water area and total area
 #Other varibles are same as the above data set
+
+data_join1<-data1|>left_join(data2, by=join_by(City))
+
 ```
 
 ```{r}
@@ -42,7 +65,13 @@ data2$City <- str_replace_all(data2$City, "[*\\[\\]]", "")
 
 data3<-read.csv("C:/Users/Hei Yee Lau/Desktop/Uconn/STAT_5125/Project/us-cities-demographics.csv", sep = ";")
 
-data3|>filter(City=="New York")
+data_join2<-data1|>left_join(data3, by=join_by(City))|>drop_na(Race)|>pivot_wider(names_from = Race, values_from = Count)
+
+data_join2|>filter(is.na(Median.Age)==TRUE)
+data_join2<-data_join2|>drop_na(Median.Age)
+data_join2 |>
+ vis_dat()
+
 ```
 
 ```{r}
@@ -50,7 +79,55 @@ data3|>filter(City=="New York")
 # unemployment rate info is from 2023
 
 data4<-read.csv("C:/Users/Hei Yee Lau/Desktop/Uconn/STAT_5125/Project/us_cities.csv")
+
+data_join3<-data_join2|>left_join(data4, by=join_by(City))
+data_join3|>filter(is.na(Latitude)==TRUE)
+data_join3|>drop_na(Latitude)
+
+
+view(data_join3)
 ```
+
+
+```{r}
+#drop the column dont need
+
+data_drop<-select(data_join3, -c(City, ST, Change, Location, State.x, X, State.Code, State.y, Region, Latitude, Longitude ))
+
+
+
+#rename the column
+data_drop|>filter(is.na(TransitScore)==TRUE)
+
+
+#impute missing value by KNN
+knn_impute <- data_drop |>
+ nabular(only_miss = TRUE) |>
+ kNN(variable = c("AvgRent", "MedianRent", "UnempRate", "AvgIncome", "CostOfLiving", "PriceParity", "CommuteTime", "MedianAQI", "WalkScore", "BikeScore", "TransitScore"),
+ dist_var = c("X2022estimate", "X2020census", "X2020.land.area", "X2020.land.area.1", "X2020.density", "X2020.density.1", "Median.Age", "Male.Population", "Female.Population", "Total.Population", "Number.of.Veterans", "Foreign.born", "Average.Household.Size", "American Indian and Alaska Native", "White", "Hispanic or Latino", "Black or African-American", "Asian"))
+
+knn_impute<-knn_impute%>%clean_names()
+
+knn_impute<-knn_impute%>%select(-c(american_indian_and_alaska_native_na, black_or_african_american_na, asian_na, size_na, population_na, avg_rent_na, median_rent_na, unemp_rate_na, avg_income_na, cost_of_living_na, price_parity_na, commute_time_na, median_aqi_na, walk_score_na, bike_score_na, , transit_score_na,avg_rent_imp,median_rent_imp,unemp_rate_imp,avg_income_imp,cost_of_living_imp,price_parity_imp,commute_time_imp,median_aqi_imp,walk_score_imp,bike_score_imp,transit_score_imp
+))
+
+view(knn_impute)
+
+lm_model <- lm(x2022estimate ~ ., data = knn_impute)
+summary(lm_model)
+```
+
+```{r}
+#imputate missing value by linear model (Still error)
+knn_imputate <- data_drop |>
+ nabular(only_miss = TRUE) |>
+  impute_lm(AvgRent~X2022estimate+X2020census+X2020.land.area+X2020.land.area.1+X2020.density+X2020.density.1+Median.Age+Male.Population+Female.Population+Total.Population+Number.of.Veterans+Foreign.born+Average.Household.Size)
+
+
+
+```
+
+
 
 ```{r}
 # https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us
