@@ -10,6 +10,7 @@ library(tidyverse)
 library(visdat)
 library(tidyr)
 library(janitor)
+library(kknn)
 ```
 
 ```{r}
@@ -85,36 +86,207 @@ data_join3|>filter(is.na(Latitude)==TRUE)
 data_join3|>drop_na(Latitude)
 
 
-view(data_join3)
+#view(data_join3)
 ```
-
 
 ```{r}
 #drop the column dont need
-
+library(VIM)
+library(naniar)
 data_drop<-select(data_join3, -c(City, ST, Change, Location, State.x, X, State.Code, State.y, Region, Latitude, Longitude ))
 
 
 
 #rename the column
 data_drop|>filter(is.na(TransitScore)==TRUE)
-
+data_drop|>miss_var_summary()
 
 #impute missing value by KNN
 knn_impute <- data_drop |>
  nabular(only_miss = TRUE) |>
- kNN(variable = c("AvgRent", "MedianRent", "UnempRate", "AvgIncome", "CostOfLiving", "PriceParity", "CommuteTime", "MedianAQI", "WalkScore", "BikeScore", "TransitScore"),
+ kNN(variable = c("American Indian and Alaska Native","Black or African-American","Asian","Size", "Population","AvgRent", "MedianRent", "UnempRate", "AvgIncome", "CostOfLiving", "PriceParity", "CommuteTime", "MedianAQI", "WalkScore", "BikeScore", "TransitScore"),
  dist_var = c("X2022estimate", "X2020census", "X2020.land.area", "X2020.land.area.1", "X2020.density", "X2020.density.1", "Median.Age", "Male.Population", "Female.Population", "Total.Population", "Number.of.Veterans", "Foreign.born", "Average.Household.Size", "American Indian and Alaska Native", "White", "Hispanic or Latino", "Black or African-American", "Asian"))
 
 knn_impute<-knn_impute%>%clean_names()
 
-knn_impute<-knn_impute%>%select(-c(american_indian_and_alaska_native_na, black_or_african_american_na, asian_na, size_na, population_na, avg_rent_na, median_rent_na, unemp_rate_na, avg_income_na, cost_of_living_na, price_parity_na, commute_time_na, median_aqi_na, walk_score_na, bike_score_na, , transit_score_na,avg_rent_imp,median_rent_imp,unemp_rate_imp,avg_income_imp,cost_of_living_imp,price_parity_imp,commute_time_imp,median_aqi_imp,walk_score_imp,bike_score_imp,transit_score_imp
+knn_impute<-knn_impute%>%select(-c(american_indian_and_alaska_native_na, black_or_african_american_na, asian_na, size_na, population_na, avg_rent_na, median_rent_na, unemp_rate_na, avg_income_na, cost_of_living_na, price_parity_na, commute_time_na, median_aqi_na, walk_score_na, bike_score_na, , transit_score_na,avg_rent_imp,median_rent_imp,unemp_rate_imp,avg_income_imp,cost_of_living_imp,price_parity_imp,commute_time_imp,median_aqi_imp,walk_score_imp,bike_score_imp,transit_score_imp,american_indian_and_alaska_native_na,black_or_african_american_na, asian_na,size_na,population_na,size_imp,asian_imp,american_indian_and_alaska_native_imp,black_or_african_american_imp,population_imp
+
 ))
 
-view(knn_impute)
+#view(knn_impute)
 
 lm_model <- lm(x2022estimate ~ ., data = knn_impute)
 summary(lm_model)
+
+#model that not impute that with missing value
+#data_drop<-data_drop|>clean_names()
+#lm_model <- lm(x2022estimate ~ ., data = data_drop)
+#summary(lm_model)
+```
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+#Prediction using workflow and recipe
+#split the data 90/10
+set.seed(3)
+population_split <- initial_split(knn_impute, 
+prop = 0.9, 
+strata = x2022estimate)
+population_train <- population_split |>
+ training()
+population_test <- population_split |>
+ testing()
+```
+
+```{r}
+#model 1
+population_parsnip_1 <- linear_reg() |> 
+set_mode("regression") |>
+ set_engine("lm")
+population_workflow_1 <- workflow() |>
+ add_model(population_parsnip_1) |>
+ add_formula(x2022estimate ~ .)
+ 
+#model 2
+population_recipe_2 <- recipe(x2022estimate ~ .,
+ data = population_train)
+population_recipe_2 <- population_recipe_2  |> 
+step_normalize(all_numeric_predictors()) |>
+ step_pca(all_numeric_predictors(), 
+num_comp = 3) |>
+ step_dummy(all_nominal_predictors()) 
+
+population_workflow_2 <- workflow() |>
+ add_model(population_parsnip_1) |>
+ add_recipe(population_recipe_2)
+
+
+#model 3
+population_recipe_3 <- recipe(x2022estimate ~ .,
+ data = population_train)
+population_recipe_3 <- population_recipe_3  |> 
+step_normalize(all_numeric_predictors()) |>
+ step_pca(all_numeric_predictors(), 
+num_comp = 30) |>
+ step_dummy(all_nominal_predictors())
+
+population_parsnip_3 <- linear_reg(penalty = 0.5) |> 
+set_mode("regression") |>
+ set_engine("glmnet")
+ 
+population_workflow_3 <- workflow() |>
+ add_model(population_parsnip_3) |>
+ add_recipe(population_recipe_3)
+
+```
+
+```{r}
+#model 4
+library(kknn)
+population_parsnip_4 <- nearest_neighbor() |> 
+set_mode("regression") |>
+ set_engine("kknn", neighbors = 5)
+population_workflow_4 <- workflow() |>
+ add_model(population_parsnip_4) |>
+ add_formula(x2022estimate ~ .)
+ 
+#model 5
+library(ranger)
+population_parsnip_5 <- rand_forest() |> 
+  set_mode("regression") |>
+  set_engine("ranger")
+population_workflow_5<- workflow() |>
+  add_model(population_parsnip_5) |>
+  add_formula(x2022estimate ~ .)
+
+```
+
+
+```{r}
+workflow_names <- c("lm", 
+                 "lm_PCA",
+                 "lm_PCA_lasso",
+                 "knn",
+                 "rf")
+
+
+workflow_objects <- list(population_workflow_1,
+                           population_workflow_2,
+                           population_workflow_3,
+                           population_workflow_4,
+                           population_workflow_5)
+
+
+workflows_tbl <- tibble(work_names = workflow_names,
+                        work_objects = workflow_objects)
+ workflows_tbl
+ 
+ 
+ 
+set.seed(1)
+ workflows_tbl <- workflows_tbl |>
+  rowwise() |>
+  mutate(fits = list(fit(work_objects, 
+                         population_train)))
+ workflows_tbl
+ 
+ 
+ 
+ workflows_tbl <- workflows_tbl |>
+ mutate(predictions = list(predict(fits,
+ population_test)))
+ workflows_tbl
+
+```
+
+
+```{r}
+#check the performance 
+predictions_tbl  <- workflows_tbl |>
+ select(work_names, 
+predictions) |>
+ unnest(cols = c(predictions))
+
+
+predictions_tbl <- predictions_tbl |>
+ cbind(population = population_test |>
+ pull(x2022estimate))
+
+ predictions_tbl |>
+ ggplot(aes(x = population, 
+y = .pred)) +
+ geom_point(alpha = 0.2) +
+ facet_wrap(~work_names, nrow = 2) +
+ geom_abline(slope = 1, linetype = "dotted", color = "red") +
+ coord_obs_pred()+theme_bw()
+
+```
+
+
+```{r}
+#Check the performance
+population_metrics <- metric_set(yardstick::rmse, rsq, yardstick::mae)
+
+ predictions_tbl |>
+ filter(work_names == "lm") |>
+ population_metrics(truth = population, 
+estimate = .pred)
+
+ 
+ 
+predictions_metrics <- predictions_tbl |>
+ group_by(work_names) |>
+ population_metrics(truth = population, estimate = .pred)
+
+
+predictions_metrics  |> ggplot(aes(y = work_names, 
+x = .estimate, 
+fill = work_names)) + 
+geom_col() +
+ facet_wrap(~.metric, 
+scales = "free_x")+theme_bw()
+
 ```
 
 ```{r}
@@ -126,8 +298,6 @@ knn_imputate <- data_drop |>
 
 
 ```
-
-
 
 ```{r}
 # https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us
