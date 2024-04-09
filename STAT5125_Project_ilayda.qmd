@@ -26,28 +26,32 @@ target <- web1[[3]] |>
          land_area_km2 = '2020_land_area_1',
          population = '2020census',
          density_mi2 = '2020_density',
-         density_km2 = '2020_density_1') |>
+         density_km2 = '2020_density_1',
+         state_code = st) |>
   mutate(across(everything(), ~ str_replace_all(., ",", ""))) |>
-  mutate_at(c("population", "land_area_mi2", "land_area_km2", "density_mi2", "density_km2"), as.numeric)
+  mutate_at(c("population", "land_area_mi2", "land_area_km2", "density_mi2", "density_km2"), as.numeric) |>
+  select(-land_area_mi2,
+         -density_mi2,
+         -density_km2)
 
 target
 
 ```
 
 ```{r}
-html2 <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_cities_by_area") 
-web2 <- html_table(html2)
-features1 <- web2[[2]] |>
-  data.frame() |>
-  slice(-1) |>
-  select(-starts_with("population")) |>
-  clean_names() |>
-  mutate(city = str_remove(str_remove(city, "\\[.*?\\]"), "\\*+")) |>
-  rename_with(~str_replace(., "1", "km2"), ends_with("_1")) |>
-  rename_with(~str_c(., "_mi2"), ends_with("area")) |>
-  mutate(across(everything(), ~ str_replace_all(., ",", "")))
+#html2 <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_cities_by_area") 
+#web2 <- html_table(html2)
+#features1 <- web2[[2]] |>
+#  data.frame() |>
+#  slice(-1) |>
+#  select(-starts_with("population")) |>
+#  clean_names() |>
+#  mutate(city = str_remove(str_remove(city, "\\[.*?\\]"), "\\*+")) |>
+#  rename_with(~str_replace(., "1", "km2"), ends_with("_1")) |>
+#  rename_with(~str_c(., "_mi2"), ends_with("area")) |>
+#  mutate(across(everything(), ~ str_replace_all(., ",", "")))
 
-features1
+#features1
 ```
 
 ```{r}
@@ -60,7 +64,20 @@ features2 <- csv1 |>
   clean_names() |>
   pivot_wider(names_from = race,
               values_from = count) |>
-  clean_names()
+  clean_names() |>
+  select(-total_population) |>
+  rename(american = american_indian_and_alaska_native,
+         hispanic = hispanic_or_latino,
+         black = black_or_african_american,
+         male = male_population,
+         female = female_population) |>
+  mutate(male = round(male/(male+female),4),
+         female = 1-male) |>
+  mutate(white = white/(white+american+hispanic+black+asian),
+         american = american/(white+american+hispanic+black+asian),
+         hispanic = hispanic/(white+american+hispanic+black+asian),
+         black = black/(white+american+hispanic+black+asian),
+         asian = asian/(white+american+hispanic+black+asian)) 
   
 features2
 
@@ -74,7 +91,17 @@ features2
 csv2 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us_cities.csv")
 features3 <- csv2 |>
   clean_names() |>
-  select(-x)
+  select(-x,
+         -latitude,
+         -longitude) |>
+  mutate(region = as.factor(region),
+         size = as.factor(size),
+         avg_rent = as.double(avg_rent)) |>
+  select(-population,
+         -bike_score,
+         -walk_score,
+         -commute_time,
+         -median_aqi) #so many null values
 
 features3
 ```
@@ -86,7 +113,9 @@ features3
 csv3 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/estate of city.csv")
 
 features4 <- csv3 |>
-  clean_names()
+  clean_names() |>
+  select(-count)
+  
 
 features4
 ```
@@ -94,9 +123,9 @@ features4
 We need to join the dfs by both city and state information because some different states have the same city name. The last data set 'features4' doesn't have state names but the city names are distinct. I checked it below.
 
 ```{r}
-features1 |>
-  summarize(rows = n(),
-            distinct_city = n_distinct(city))
+#features1 |>
+#  summarize(rows = n(),
+#            distinct_city = n_distinct(city))
 
 features2 |>
   summarize(rows = n(),
@@ -109,4 +138,30 @@ features3 |>
 features4 |>
   summarize(rows = n(),
             distinct_city = n_distinct(city))
+```
+
+```{r}
+trial1 <- target |>
+  left_join(features2,
+             by = c("city", "state_code")) |>
+  left_join(features4,
+            by = c("city"))
+
+trial1
+
+trial2 <- target |>
+  left_join(features2,
+             by = c("city", "state_code")) |>
+  left_join(features3,
+             by = c("city", "state")) |>  
+  left_join(features4,
+            by = c("city"))
+
+trial2
+```
+
+```{r}
+library(naniar)
+vis_miss(trial1)
+vis_miss(trial2)
 ```
