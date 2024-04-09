@@ -1,0 +1,112 @@
+---
+title: "STAT5125 Project"
+format: html
+editor: visual
+---
+
+```{r, warning = FALSE, message = FALSE}
+library(rvest)     
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+html1 <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population") 
+web1 <- html_table(html1)
+target <- web1[[3]] |>
+  data.frame() |>
+  slice(-1) |>
+  clean_names() |>
+  mutate(city = str_remove(city, "\\[.\\]")) |>
+  rename_with(~str_remove(., "^x"), starts_with("x")) |>
+  select(-starts_with("2022"),
+         -change,
+         -location) |>
+  rename(land_area_mi2 = '2020_land_area',
+         land_area_km2 = '2020_land_area_1',
+         population = '2020census',
+         density_mi2 = '2020_density',
+         density_km2 = '2020_density_1') |>
+  mutate(across(everything(), ~ str_replace_all(., ",", ""))) |>
+  mutate_at(c("population", "land_area_mi2", "land_area_km2", "density_mi2", "density_km2"), as.numeric)
+
+target
+
+```
+
+```{r}
+html2 <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_cities_by_area") 
+web2 <- html_table(html2)
+features1 <- web2[[2]] |>
+  data.frame() |>
+  slice(-1) |>
+  select(-starts_with("population")) |>
+  clean_names() |>
+  mutate(city = str_remove(str_remove(city, "\\[.*?\\]"), "\\*+")) |>
+  rename_with(~str_replace(., "1", "km2"), ends_with("_1")) |>
+  rename_with(~str_c(., "_mi2"), ends_with("area")) |>
+  mutate(across(everything(), ~ str_replace_all(., ",", "")))
+
+features1
+```
+
+```{r}
+# website link
+# https://public.opendatasoft.com/explore/dataset/us-cities-demographics/table/?flg=en-us
+
+csv1 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us-cities-demographics.csv", sep = ";")
+
+features2 <- csv1 |>
+  clean_names() |>
+  pivot_wider(names_from = race,
+              values_from = count) |>
+  clean_names()
+  
+features2
+
+# for this data set, we should calculate percentage for each race then remove the columns with counts
+```
+
+```{r}
+# https://www.kaggle.com/datasets/denissad/us-cities
+# unemployment rate info is from 2023
+
+csv2 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us_cities.csv")
+features3 <- csv2 |>
+  clean_names() |>
+  select(-x)
+
+features3
+```
+
+```{r}
+# https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us
+# we don't have year info for this one
+
+csv3 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/estate of city.csv")
+
+features4 <- csv3 |>
+  clean_names()
+
+features4
+```
+
+We need to join the dfs by both city and state information because some different states have the same city name. The last data set 'features4' doesn't have state names but the city names are distinct. I checked it below.
+
+```{r}
+features1 |>
+  summarize(rows = n(),
+            distinct_city = n_distinct(city))
+
+features2 |>
+  summarize(rows = n(),
+            distinct_city = n_distinct(city))
+
+features3 |>
+  summarize(rows = n(),
+            distinct_city = n_distinct(city))
+
+features4 |>
+  summarize(rows = n(),
+            distinct_city = n_distinct(city))
+```
