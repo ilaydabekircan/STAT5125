@@ -703,6 +703,13 @@ Interestingly, the random forest and k-nearest neighbors model demonstrated bett
 
 Additionally, the second datset, which contained more features, provided the random forest models with more information to learn from, resulting in better performance compared to the first dataset. However, it is important to note that the increased dimensionality of the second dataset may also introduce challenges such as increased computational complexity and potential overfitting.
 
-For future exploration, it would be benficial to delve deeper into feature engineering and selection techniques to further improve model performance. Additionally, exploring advanced ensemble techniques and model tuning could help squeeze out addition performance gains. Furthermore, investigating the impact of different imputation methods for handling missing data and evaluating the robustness o the models across different population demographics could provide valuable insights. 
+For future exploration, it would be benficial to delve deeper into feature engineering and selection techniques to further improve model performance. Additionally, exploring advanced ensemble techniques and model tuning could help squeeze out addition performance gains. Furthermore, investigating the impact of different imputation methods for handling missing data and evaluating the robustness o the models across different population demographics could provide valuable insights.
 
 In conclusion,based on the comprehensive evaluation of model performance and considering future exploratory directions, we have selected the random forest model trained on the second dataset with ore features as the preferred model for this project. Its superior predictive accuracy and ability to capture complex relationships make it the optimal choice for population prediction in this context.
+
+##Add Ons
+Perform Principal Component Analysis
+Impute Missing Data
+Clean Data Using a Regular expression
+Make a Github Repository 
+Scrape Data From Online
