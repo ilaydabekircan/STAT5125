@@ -1,0 +1,710 @@
+---
+title: "US City Population Prediction Project"
+format: html
+author: "Hei Yee Lau & Ilayda Bekircan"
+editor: visual
+editor_options: 
+  chunk_output_type: inline
+---
+
+## OBJECTIVE
+
+The objective of this project is to conduct a comprehensive analysis of demographic information of cities in the United States. Through statistical processing and predictive modeling techniques, we aim to uncover patterns and trends in population dynamics, including factors such as age distribution, ethnic variety and house prices. By understanding the relationship between these variables, this project seeks to develop accurate predictive models capable of forecasting the population sizes for the selected cities. Additionally, the study intends to provide valuable insights into the social, economic, and environmental factors influencing population.
+
+This project involves data cleaning, integration of several data sets, and imputation to ensure data quality. Following the preprocessing, we conduct exploratory analysis to gain insights into the demographic characteristics of various U.S. cities. Then, the data will be divided into training and testing sets for the evaluation of predictive models. Several regression-based models, including linear regression, linear regression with principal component analysis (PCA), and linear regression with penalty, along with non-linear models such as k-nearest neighbors (KKNN) and random forest, will be implemented and compared by using key performance metrics including Root Mean Squared Error (RMSE), R-squared (R\^2), and Mean Absolute Error (MAE). By evaluating different modeling approaches and conducting PCA analysis, this project seeks to provide valuable insights about the predictive capabilities of various regression techniques and their applicability to demographic data analysis.
+
+## DATA DESCRIPTION
+
+There are four different data sets used in this project to gather information about the population, demographic information and some external information that might affect population of cities in the United States. Below are the data sets along with explanations of their features. Any removed features are not explained in this section.
+
+The first data set is sourced from Wikipedia (<https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population>) to have the population information which is the target of the predictive models in this project.
+
+**city:** the name of the city in the United States
+
+**state_code:** the code assigned to the state in which the city is located and it is typically standardized with two-letter abbreviations
+
+**population:** the number of individuals residing within the city limits and this is the target variable of the models in this project
+
+**land_area_km2:** the total land area occupied by the city, measured in square kilometers
+
+The second data set contains information mainly about city demographics which is sourced from <https://public.opendatasoft.com/explore/dataset/us-cities-demographics/table/?flg=en-us> . It also has city and state code features which will be used to join the data after cleaning all individual data sets.
+
+**state:** the full name of the state in which the city is located
+
+**median_age:** the median age of the population within the city which represents the midpoint of the age distribution
+
+**male:** the percentage of the male residents within the city
+
+**female:** the percentage of the female residents within the city
+
+**average_household_size:** the average number of individuals living in each household within the city which can influence various social and economic factors
+
+**white:** the percentage of individuals who identify themselves as White or Caucasian within the city
+
+**american:** the percentage of individuals who identify themselves as American Indian or Alaska Native within the city
+
+**hispanic:** the percentage of individuals who identify themselves as Hispanic or Latino within the city
+
+**black:** the percentage of individuals who identify themselves as Black or African American within the city
+
+**asian:** the percentage of individuals who identify themselves as Asian within the city
+
+**perc_veterans:** the percentage of residents within the city who are military veterans
+
+**perc_foreign_born:** the percentage of residents within the city who were born outside of the United States which indicates the level of international migration and cultural diversity within the population
+
+The third data set is obtained from Kaggle (<https://www.kaggle.com/datasets/denissad/us-cities>) It provides insights about various city attributes, including economic indicators, demographic characteristics, and quality of life metrics.
+
+**region:** thegeographical area in which the city belongs and the regions are given as factors with Northeast, Midwest, South and West
+
+**size:** thesize of the city given as factors with large, mid-sized, small
+
+**avg_rent:** the average rental price for housing which provides information about cost of living and housing affordability for residents
+
+**median_rent:** the median rental price for housing which can provide a measure of central tendency that may be more representative of typical rental prices than the average rent
+
+**unemp_rate:** the percentage of the labor force for the residents who are unemployed and actively seeking employment and this is a key economic indicator for the city
+
+**avg_income: t**he average income earned by residents, which provides insight about the economic prosperity and standard of living within the city
+
+**cost_of_living:** the overall cost of living index, which takes into account factors such as housing, transportation, groceries, healthcare
+
+**price_parity:** the purchasing power parity (PPP) of the city, which provides insight about the relative affordability and purchasing power of residents
+
+**commute_time:** the average time that takes for residents to commute to work or other destinations within the city
+
+**median_aqi:** the median value of the Air Quality Index (AQI), which measures the level of air pollution and its potential impact on health
+
+**transit_score:** the score that evaluates the accessibility and quality of public transportation
+
+The fourth and final data set included in this project is sourced from Kaggle (<https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us>). This data set gives information about only house sale prices.
+
+**avg_price:** the average sale price of houses within the city, which gives insight about the real estate landscape in that area
+
+## ANALYSIS
+
+### Data Preprocessing
+
+```{r, warning = FALSE, message = FALSE}
+library(rvest)     
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+html1 <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population") 
+web1 <- html_table(html1)
+target <- web1[[3]] |>
+  data.frame() |>
+  slice(-1) |>
+  clean_names() |>
+  mutate(city = str_remove(city, "\\[.\\]")) |>
+  rename_with(~str_remove(., "^x"), starts_with("x")) |>
+  select(-starts_with("2022"),
+         -change,
+         -location) |>
+  rename(land_area_mi2 = '2020_land_area',
+         land_area_km2 = '2020_land_area_1',
+         population = '2020census',
+         density_mi2 = '2020_density',
+         density_km2 = '2020_density_1',
+         state_code = st) |>
+  mutate(across(everything(), ~ str_replace_all(., ",", ""))) |>
+  mutate_at(c("population", "land_area_mi2", "land_area_km2", "density_mi2", "density_km2"), as.numeric) |>
+  select(-land_area_mi2,
+         -density_mi2,
+         -density_km2)
+
+head(target)
+```
+
+We tidy the first data set which includes our target variable. The first row of the data set shows the column names so we slice the first row to only have observations. Some city names have unnecessary characters such as "\[c\]" so we use regular expression to standardize the city names. Regular expression is also used to change "." in numerical columns to standardize the values. Unnecessary columns are dropped such as land area in inch squared because it is highly correlated with land area in km squared. When scraping, all columns are scraped as character columns so some of the columns are changed to numeric type.
+
+```{r}
+csv1 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us-cities-demographics.csv", sep = ";")
+
+features2 <- csv1 |>
+  clean_names() |>
+  pivot_wider(names_from = race,
+              values_from = count) |>
+  clean_names() |>
+  rename(american = american_indian_and_alaska_native,
+         hispanic = hispanic_or_latino,
+         black = black_or_african_american,
+         male = male_population,
+         female = female_population) |>
+  mutate(male = round(male/(male+female),4),
+         female = 1-male) |>
+  mutate(white = white/(white + american + hispanic + black + asian),
+         american = american/(white + american + hispanic + black + asian),
+         hispanic = hispanic/(white+american+hispanic+black+asian),
+         black = black/(white + american + hispanic + black + asian),
+         asian = asian/(white + american + hispanic + black + asian)) |>
+  mutate(perc_veterans = number_of_veterans / total_population,
+         perc_foreign_born = foreign_born / total_population) |>
+  select(-total_population,
+         -number_of_veterans,
+         -foreign_born)
+
+head(features2)
+```
+
+In this data set, each city is duplicated several times with different race information. For example, Newark has 5 rows for each race (white, american, hispanic, black and asian) with their population count. Therefore, we used pivot_wider to create a column for each race. Since the sum of all race populations give the exact population, it gets highly correlated with the target variable, city population. Therefore, we converted the race populations into percentages to use this demographic information in the models. The same procedure is applied for female/male, number of veterans and foreign born columns to represent the the groups' population as percentages. After this process, the unnecessary columns are dropped.
+
+```{r}
+csv2 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us_cities.csv")
+features3 <- csv2 |>
+  clean_names() |>
+  select(-x,
+         -latitude,
+         -longitude) |>
+  mutate(region = as.factor(region),
+         size = as.factor(size),
+         avg_rent = as.double(avg_rent)) |>
+  select(-population,
+         -bike_score,
+         -walk_score) # more than 75% of null values for bike_score and walk_score
+
+head(features3)
+```
+
+In this data set, some columns like region and size are given as characters while they should be represented as factors so their types are corrected. Also, unnecessary columns are removed such as X (represents index of rows). Since bike score and walk score columns have more than 75% missing values and we already have a column that represents transit score, we removed those as well. Also, the population column is removed because the target variable (population) is already taken in the first data set which we will join them in the next steps.
+
+```{r}
+# https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us
+
+csv3 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/estate of city.csv")
+
+features4 <- csv3 |>
+  clean_names() |>
+  select(-count)
+
+head(features4)
+```
+
+This data set only contains city information, the count of housing sales and average prices of the houses. We remove the count of housing sales since it might be very dynamic and fluctuate in a short period of time. However, the average price is used which can be a good indicator for the cost of living in the cities which is related to the population.
+
+```{r}
+trial1 <- target |>
+  left_join(features2,
+             by = c("city", "state_code")) |>
+  left_join(features4,
+            by = c("city"))
+
+head(trial1)
+
+trial2 <- target |>
+  left_join(features2,
+             by = c("city", "state_code")) |>
+  left_join(features3,
+             by = c("city", "state")) |>  
+  left_join(features4,
+            by = c("city"))
+
+head(trial2)
+```
+
+We joined the data sets by their city and state information using left_join because out reference data set is the one that has the target variable. We created two main data sets to conduct models which will be explained in the next step.
+
+```{r}
+library(naniar)
+vis_miss(trial1)
+vis_miss(trial2)
+```
+
+The first joined data set (trial1) includes only three data set (excluding the third data set with information such as cost of living, commute time and median aqi). The second data set includes all four data sets. The reason why we used two different data sets to model them separately is the difference in their missing values percentages. The first data set has only 4.5% missing values total and the maximum missing percentage for a column is 8. However, the second data set has 24.4% total missing information while the maximum missing percentage of a column is 56. For both data sets, we will impute the missing values. Both data sets have their own advantages and disadvantages. The first data set has less features than the second data set which might cause poorly performance for the model because of containing less information. On the contrary, the second data set more missing values which might cause poor prediction power if imputing process isn't handled well. Therefore, we will conduct the models with same parameters for each data set and compare their performance at the end.
+
+```{r}
+#imputation based on KNN
+library(VIM)
+trial1 <- select(trial1, -c(city, state_code, state))
+trial1 |> 
+  miss_var_summary() |>
+  arrange(desc(pct_miss)) |>
+  head()
+ 
+knn_impute_t1 <- trial1 |>
+ nabular(only_miss = TRUE) |>
+ kNN(variable = c("land_area_km2" ,"median_age", "male", "female", "average_household_size", "white", "american", "hispanic", "black", "asian", "perc_veterans", "perc_foreign_born", "avg_price"),
+     dist_var = c("land_area_km2" ,"median_age", "male", "female", "average_household_size", "white", "american", "hispanic", "black", "asian", "perc_veterans", "perc_foreign_born", "avg_price"))
+
+knn_impute_t1 <- knn_impute_t1 |> 
+  select(-ends_with("NA"),
+         -ends_with("imp"))
+
+knn_impute_t1 |> 
+  miss_var_summary() |>
+  arrange(desc(pct_miss)) |>
+  head()
+
+head(knn_impute_t1)
+```
+
+Before imputation, city name, state name and state code columns are removed since they are only for joining the data sets and they will not be used in the modelling parts. Before KNN imputation, we print the columns maximum missing percentage and missing count. In the imputation part of the code, we perform KNN imputation on missing values for the specified variables of trial1 using 'variable' argument to specify the target variables for imputation and 'dist_var' argurment to specify the variables for calculating distances between observations for finding the nearest neighbors. After imputation, missing counts and percentages are printed to double check if the imputation works and if there is any missing values left.
+
+We prefer KNN method because it imputes the missing values based on the similarities of other observations. Also, it doesn't make any assumptions about the distribution of the data which makes it suitable for our data set. Since we have not only numerical but also categorical variables (factors), using KNN is preferable for this data.
+
+```{r}
+#imputation based on KNN
+trial2 <- select(trial2, -c(city, state_code, state))
+
+trial2 |> 
+  miss_var_summary() |>
+  arrange(desc(pct_miss)) |>
+  head()
+
+knn_impute_t2 <- trial2 |>
+ nabular(only_miss = TRUE) |>
+ kNN(variable = c("land_area_km2", "median_age", "male", "female", "average_household_size", "white", "american", "hispanic", "black", "asian", "perc_veterans", "perc_foreign_born", "region", "size", "avg_rent", "median_rent", "unemp_rate", "avg_income", "cost_of_living", "price_parity", "commute_time", "median_aqi", "transit_score", "avg_price"),
+     dist_var = c("land_area_km2", "median_age", "male", "female", "average_household_size", "white", "american", "hispanic", "black", "asian", "perc_veterans", "perc_foreign_born", "region", "size", "avg_rent", "median_rent", "unemp_rate", "avg_income", "cost_of_living", "price_parity", "commute_time", "median_aqi", "transit_score", "avg_price"))
+
+knn_impute_t2 <- knn_impute_t2 |> 
+  select(-ends_with("NA"),
+         -ends_with("imp"))
+
+knn_impute_t2 |> 
+  miss_var_summary() |>
+  arrange(desc(pct_miss)) |>
+  head()
+
+head(knn_impute_t2)
+```
+
+The same procedure as trial1 is applied to trial2 to impute the missing values with KNN imputation. We don't use the target variable (population) in both imputation processes to prevent any data leakage. Our goal in imputation is to replace the missing values by using other observations but we need to avoid the information from target to prevent from overfitting and potential bias.
+
+### Exploratory Data Analysis
+
+```{r}
+#EDA
+summary(knn_impute_t1$population)
+summary(knn_impute_t2$population)
+
+```
+
+The population information in both data sets have no missing values and the target data set is used as reference table which leads us to have the same population observations for both data set. Therefore, the summary statistics of population variable for both data sets are identical to each other. This data set has a wide range of population values, as indicated by the large difference between the minimum and maximum values. The city with the minimum population is Conroe, TX and the city with the maximum population is New York, NY. The mean population (293,392) is higher than the median population (155,984), suggesting that the distribution of population might be right-skewed because the data lies towards the lower end of the distribution while fewer very high values are pulling the mean upwards. The interquartile range, which represents the middle 50% of the data, is from 116,317 to 262,527.
+
+```{r, warning=FALSE}
+library(ggplot2)
+library(gridExtra)
+
+# For dataset1
+plot_pop1 <- ggplot(knn_impute_t1, aes(x = population)) +
+  geom_histogram(fill = "skyblue", color = "black", bins = 30) +
+  labs(title = "Population Distribution for Data Set 1", 
+       x = "Population", 
+       y = "Frequency") +
+  theme_bw()
+
+plot_pop2 <- ggplot(knn_impute_t2, aes(x = population)) +
+  geom_histogram(fill = "skyblue", color = "black", bins = 30) +
+  labs(title = "Population Distribution for Data Set 2", 
+       x = "Population", 
+       y = "Frequency") + 
+  theme_bw()
+
+grid.arrange(plot_pop1, plot_pop2, ncol = 2)
+```
+
+Since we know the distributions of population variable is the same for both data sets, their histogram plots are exactly the same. We can see from the plots that the distribution is highly right-skewed which we also stated in the summary statistics of the population. This skewness suggests that the majority of cities in the data set have relatively low populations and there are some outliers on the higher end, suggesting that a few data points have significantly larger populations such as New York with 8804190 residents and Los Angeles with 3898747 residents. Because of the outliers, the range in the population values is significantly wide.
+
+```{r}
+# For dataset2
+plot_age1 <- ggplot(knn_impute_t1, aes(x = median_age)) +
+  geom_histogram(fill = "lightgreen", color = "black", bins = 30) +
+  labs(title = "Median Age Distribution - 1", x = "Median Age", y = "Frequency") + 
+  theme_bw()
+
+plot_age2 <- ggplot(knn_impute_t2, aes(x = median_age)) +
+  geom_histogram(fill = "lightgreen", color = "black", bins = 30) +
+  labs(title = "Median Age Distribution - 2", x = "Median Age", y = "Frequency") + 
+  theme_bw()
+
+grid.arrange(plot_age1, plot_age2, ncol = 2)
+
+```
+
+Although median_age has missing values in both data frames and they are imputed, we get exactly the same distribution for both. The range of median_age is approximately between 23 and 47. The distribution seems to be similar to a normal distribution because of its peak at the center and the symmetric behavior around the center although there are some fluctuations.
+
+```{r}
+#Correlation
+# For dataset1
+library(corrplot)
+
+correlation_matrix1 <- cor(select(knn_impute_t1, where(is.numeric)))
+corrplot(correlation_matrix1, method = "circle")
+```
+
+We plot the correlation matrix to see if there are highly correlated variables. Male and female features have a high negative correlation which is expected because when one of them increases, the other one decreases since they are percentages and their sum equals to 1. Hispanic feature is positively correlated with average household size and foreign born percentage. The relationship between Hispanic percentage and average household size might be due to cultural norms like having extended family in the same house. Hispanic and foreign born percentages might reflect the immigration patterns in the analysed cities.
+
+```{r}
+# For dataset2
+correlation_matrix2 <- cor(select(knn_impute_t2, where(is.numeric)))
+corrplot(correlation_matrix2, method = "circle")
+```
+
+Male and female features have highly negative correlations because of the same reason as the previous correlation matrix. Economic features have high positive correlations with each other such as average income vs cost of living or average price vs median rent. The reason why this happens is the areas with higher average incomes often attract businesses offering higher-priced goods and services, leading to an overall higher cost of living in those areas.
+
+```{r}
+# For dataset1
+plot_price1 <- ggplot(knn_impute_t1, aes(x = population, y = avg_price)) +
+  geom_point() +
+  labs(title = "Population vs. Average Price", x = "Population", y = "Average Price")+theme_bw()
+
+# For dataset2
+plot_price2 <- ggplot(knn_impute_t2, aes(x = population, y = avg_price)) +
+  geom_point() +
+  labs(title = "Population vs. Average Price", x = "Population", y = "Average Price")+theme_bw()
+
+grid.arrange(plot_price1, plot_price2, ncol = 2)
+
+```
+
+The points are heavily clustered at the lower end of both x-axis and y-axis, indicating that most of the observations have smaller populations and lower average prices. There are a few observations with larger populations and very high average prices which we know the examples like New York (the highest) and Los Angeles (the second highest).
+
+```{r}
+# For dataset1
+pairs(~population + median_age + male + female, data = knn_impute_t1)
+
+# For dataset2
+plot_mat2 <- pairs(~population + median_age + male + female, data = knn_impute_t2)
+```
+
+The matrix of scatter plots that shows the patterns between population, median age, female percentage, male percentage and gives insights about their relationship. For example, the scatter plot between median age and male looks to have randomly scattered points and there is no clear trend which indicates there is no strong linear relationship between those variables. However, the scatter plot of female and male shows significant negative relationsip. The scatter plots that have population variable seems to have skewness which prevents us to analyse it in detail because of its extreme outliers such as New York population.
+
+### Modelling
+
+```{r}
+library(tidymodels)
+library(tidyverse)
+
+set.seed(3) 
+pop_split <- initial_split(knn_impute_t1,
+                           prop = 0.9, 
+                           strata = population)
+pop_train <- pop_split |>
+ training()
+pop_test <- pop_split |>
+ testing()
+```
+
+```{r}
+# dataset 2
+set.seed(3)
+pop_split2 <- initial_split(knn_impute_t2, 
+                            prop = 0.9, 
+                            strata = population)
+pop_train_2 <- pop_split2 |>
+ training()
+pop_test_2 <- pop_split2 |>
+ testing()
+```
+
+We split the data sets into train and test by 0.9 split ratio and using stratified sampling for population.
+
+```{r}
+# model 1 (linear regression)
+
+population_parsnip_1 <- linear_reg() |> 
+  set_mode("regression") |>
+  set_engine("lm")
+
+population_workflow_1 <- workflow() |>
+  add_model(population_parsnip_1) |>
+  add_formula(population ~ .)
+ 
+# model 2 (linear regression with PCA)
+population_recipe_2 <- recipe(population ~ .,
+                              data = pop_train) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_pca(all_numeric_predictors(), num_comp = 10) |>
+  step_dummy(all_nominal_predictors()) 
+
+population_recipe_2_2 <- recipe(population ~ .,
+                                data = pop_train_2) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_pca(all_numeric_predictors(), num_comp = 10) |>
+  step_dummy(all_nominal_predictors()) 
+
+population_workflow_2 <- workflow() |>
+  add_model(population_parsnip_1) |>
+  add_recipe(population_recipe_2)
+
+population_workflow_2_2 <- workflow() |>
+  add_model(population_parsnip_1) |>
+  add_recipe(population_recipe_2_2)
+
+# model 3 (linear regression with penalty 0.5)
+population_recipe_3 <- recipe(population ~ .,
+                       data = pop_train) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_pca(all_numeric_predictors(), num_comp = 30) |>
+  step_dummy(all_nominal_predictors()) 
+
+population_recipe_3_2 <- recipe(population ~ .,
+                         data = pop_train_2) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_pca(all_numeric_predictors(), num_comp = 30) |>
+  step_dummy(all_nominal_predictors()) 
+
+population_parsnip_3 <- linear_reg(penalty = 0.5) |> 
+  set_mode("regression") |>
+  set_engine("glmnet")
+ 
+population_workflow_3 <- workflow() |>
+ add_model(population_parsnip_3) |>
+ add_recipe(population_recipe_3)
+
+population_workflow_3_2 <- workflow() |>
+ add_model(population_parsnip_3) |>
+ add_recipe(population_recipe_3_2)
+
+# model 4 (kknn with 5 neighbors)
+
+library(kknn)
+population_parsnip_4 <- nearest_neighbor() |> 
+  set_mode("regression") |>
+  set_engine("kknn", neighbors = 5)
+
+population_workflow_4 <- workflow() |>
+ add_model(population_parsnip_4) |>
+ add_formula(population ~ .)
+ 
+#model 5
+library(ranger)
+population_parsnip_5 <- rand_forest() |> 
+  set_mode("regression") |>
+  set_engine("ranger")
+
+population_workflow_5<- workflow() |>
+  add_model(population_parsnip_5) |>
+  add_formula(population ~ .)
+
+```
+
+We create the workflows for five different models: linear regression, linear regression with PCA, linear regression with penaly 0.5, k-nearest neighbors with 5 neighbors and random forest.
+
+```{r, warning=FALSE}
+workflow_names <- c("lm", 
+                    "lm_PCA",
+                    "lm_PCA_lasso",
+                    "knn",
+                    "rf")
+
+workflow_objects <- list(population_workflow_1,
+                         population_workflow_2,
+                         population_workflow_3,
+                         population_workflow_4,
+                         population_workflow_5)
+
+workflow_objects_2 <- list(population_workflow_1,
+                           population_workflow_2_2,
+                           population_workflow_3_2,
+                           population_workflow_4,
+                           population_workflow_5)
+
+
+workflows_tbl <- tibble(work_names = workflow_names,
+                        work_objects = workflow_objects)
+
+workflows_tbl_2 <- tibble(work_names = workflow_names,
+                          work_objects = workflow_objects_2)
+ 
+set.seed(1)
+workflows_tbl <- workflows_tbl |>
+  rowwise() |>
+  mutate(fits = list(fit(work_objects,pop_train))) |>
+  mutate(predictions = list(predict(fits, pop_test)))
+head(workflows_tbl)
+ 
+set.seed(1)
+workflows_tbl_2 <- workflows_tbl_2 |>
+  rowwise() |>
+  mutate(fits = list(fit(work_objects, pop_train_2))) |>
+  mutate(predictions = list(predict(fits, pop_test_2)))
+head(workflows_tbl_2)
+```
+
+We create data frames for both data sets with each model (workflow), their fits to training data and their predictions by creating list typed columns. Therefore, we can store all the information about the models and predictions in the same data frame for further analysis and comparison.
+
+```{r}
+#check the performance 
+predictions_tbl  <- workflows_tbl |>
+ select(work_names, 
+        predictions) |>
+ unnest(predictions) |>
+ cbind(population = pop_test |>
+         pull(population))
+head(predictions_tbl)
+
+predictions_tbl_2  <- workflows_tbl_2 |>
+ select(work_names, 
+        predictions) |>
+ unnest(predictions) |>
+ cbind(population = pop_test |>
+         pull(population))
+head(predictions_tbl_2)
+```
+
+We unnest the predictions column we created in the previous step to compare the predicted population with the actual population.
+
+```{r}
+predictions_tbl |>
+  ggplot(aes(x = population, 
+             y = .pred)) +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~work_names, nrow = 2) +
+  geom_abline(slope = 1, linetype = "dotted", color = "red") +
+  xlab("Actual") +
+  ylab("Prediction") +
+  coord_obs_pred() + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+predictions_tbl_2 |>
+  ggplot(aes(x = population, 
+             y = .pred)) +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~work_names, nrow = 2) +
+  geom_abline(slope = 1, linetype = "dotted", color = "red") +
+  xlab("Actual") +
+  ylab("Prediction") +
+  coord_obs_pred() + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+The data points in KNN and random forest seem to be clustered closer to the line of perfect prediction, especially for lower and mid-range values. The other models (linear model, linear model with PCA and linear model with penaly) have similar spreads but here are some outliers. This suggests that these models have reasonable degree of accuracy, but the relationship between the variables might not be strictly linear which leads the rf and knn to have better prediction rather than the linear models. For both data set 1 and data set 2, the comparisons between the models are similar according to this visualization.
+
+```{r}
+#Check the performance
+population_metrics <- metric_set(yardstick::rmse, 
+                                 rsq, 
+                                 yardstick::mae)
+
+options(scipen = 50)
+predictions_metrics <- predictions_tbl |>
+  group_by(work_names) |>
+  population_metrics(truth = population, 
+                     estimate = .pred) |>
+  mutate(.estimate = (round(.estimate, 2))) |>
+  mutate(data_set = 1)
+
+predictions_metrics_2 <- predictions_tbl_2 |>
+  group_by(work_names) |>
+  population_metrics(truth = population, 
+                     estimate = .pred) |>
+  mutate(.estimate = (round(.estimate, 2))) |>
+  mutate(data_set = 2)
+
+predictions <- predictions_metrics |>
+  full_join(predictions_metrics_2,
+             by = c("work_names", ".metric", ".estimator", "data_set", ".estimate")) |>
+  mutate(data_set = as.factor(data_set))
+
+head(predictions)
+```
+
+We calculate the model perforamances numerically by using root mean squared error, r-squared and mean absolute error. We create a new data fram that includes both data frames' performance metrics to store and use them later in the visualizations.
+
+```{r}
+# YOUR CODE HERE
+predictions |>
+  ggplot(aes(y = work_names,
+             fill = data_set,
+             x = .estimate)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~.metric,
+             scales = "free_x") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.position = "top") +
+  ylab("Model") +
+  xlab("Performance Estimate")
+```
+
+The random forest model has the lowest MAE and RMSE in both data sets, indicating it has the most accurate predictions. It also has the highest R² score in both data sets, suggesting it explains the variance in the target variable the best. The KNN model shows MAE and RMSE higher than the random forest but lower than the linear models. This indicates poorer performance than the random forest model. Also, the second data set with more features seems to have worse performance in KNN model than the data set with less features and less missing values. The linear models perform similarly and they have higher error metrics (mae and rmse) and lower r-squared value than random forest and knn. The linear model with PCA performs similarly to the linear model on MAE and RMSE but has a slightly lower $R^2$, suggesting that while the errors are comparable, the explanation of variance is slightly worse. Also, the model with both PCA and penalty (lm_PCA_lasso) has slightly a lower MAE and RMSE than lm_PCA and lm, indicating better predictive performance. The $R^2$ is also generally higher than both lm_PCA and lm, but it is not the highest. Based on the metrics mean absolute error, root mean squared error and $R^2$, random forest is the best performing model for both data sets because it consistently has the lowest errors (MAE and RMSE) and the highest $R^2$ scores, indicating higher accuracy and predictive power.
+
+Random forest has the potential of capturing the complex patterns better rather than the linear models or KNN. The second data set has more features (24 features) than the first data set (13 features) which provides the random forest model with more information to learn from and potentially leading to better performance. KNN is a nonparametric model like random forest which explains why it performs better than the linear models and can capture non-linear relationships between features and the target variable. However, it performs worse than random forest because random forest is more robust, handles high-dimensional data better, and can capture more complex patterns due to being an ensemble of many decision trees. Except lack of the ability of detecting the nonlinear patterns, the linear models are more sensitive to outliers than random forest and KNN, which can significantly affect model performance metrics. Also, linear models are more sensitive to multicollinearity which occurs in our model because of the high correlations we showed in EDA part. Although PCA can help with reducing the effect of multicollinearity, it might also remove some variance from the model which eventually causes less prediction power.
+
+Overall, we prefer to continue with the random forest using the second data set with more features because of its high predictive power and low error metrics.
+
+```{r}
+#PCA
+#standardize the data
+
+scaled_data1 <- scale(knn_impute_t1)
+pca_result1 <- prcomp(scaled_data1, center = TRUE, scale. = TRUE)
+
+str(knn_impute_t1)
+str(knn_impute_t2)
+
+numeric_data2 <- select(knn_impute_t2, where(is.numeric))
+
+scaled_data2 <- scale(numeric_data2)
+pca_result2 <- prcomp(scaled_data2, center = TRUE, scale. = TRUE)
+
+# Extract principal components
+pcs1 <- pca_result1$x
+pcs2 <- pca_result2$x
+# Extract standard deviations
+std_dev1 <- pca_result1$sdev
+std_dev2 <- pca_result2$sdev
+
+# Extract proportion of variance explained by each PC
+variance_explained1 <- pca_result1$sdev^2 / sum(pca_result1$sdev^2)
+
+variance_data1 <- data.frame(
+  PC = 1:length(variance_explained1),
+  Variance_Explained = variance_explained1
+)
+
+variance_explained2 <- pca_result2$sdev^2 / sum(pca_result2$sdev^2)
+
+variance_data2 <- data.frame(
+  PC = 1:length(variance_explained2),
+  Variance_Explained = variance_explained2
+)
+
+variance_data1
+variance_data2
+
+combined_table <- bind_rows(variance_data1, variance_data2, .id = "Table")
+
+ggplot(combined_table, aes(x = factor(PC), y = Variance_Explained, fill = factor(Table))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Variance Explained Plot",
+       x = "Principal Component (PC)",
+       y = "Variance Explained",
+       fill = "Dataset") +
+  theme_bw() 
+
+```
+
+For the Variance Explained Plot, it is the results of Principal Component Analysis for two data sets, each with their corresponding principal components and the variance explained by each PC.
+
+In the ggplot, each bar represents a principal component and the height of the bar represents the proportion of variance explained by that PC. The data set 1 has 14 principal components, while the second data set has 23 principal components. The first principal component explains approximately 23.64% of the total variability in the data while PC2 explains approximately 17.56%. For data set 2, PC1 explains approximately 35.52% of the total variability, PC2 explains approximately 11.12%.
+
+The variance explained by each principal component provides insight into the underlying structure of the data sets. A higher proportion of variance explained by a component indicates that it captures more information about the variability in the data. It provides valuable insights into the structure and variability of high-dimensional data sets. By identifying the principal components that contribute most to the variance, we can reduce the data set's dimensionality while retaining essential information.
+
+To compare two datasets, Dataset 2 explains a higher proportion of variance with PC1 compared to Dataset 1. However, Dataset1 has a higher proportion of variance explained by PC2. Dataset 1 (14) has fewer principal components compared to Dataset 2 (23).
+
+Considering these factors, this means that dataset 1 requires less computational resources and may be more straightforward to analyze, especially if efficiency and simplicity are important considerations. Fewer principal components also mean simpler model interpretation and potentially less overfitting, which can lead to more robust and generalizable results.
+
+While dataset 1 has fewer principal components, Dataset 2 explains a higher proportion of variance with PC1 compared to Dataset 1. This suggests that dataset 2 captures more information about the underlying stricture and variability of the data in its first principal component. Capturing a higher proportion of variance can be advantageous if the goal is to retain as much information as possible in the reduced-dimensional space.
+
+Therefore, there is trade-offs between dimensionality reduction efficiency and capturing variance on dataset 1 and dataset 2.
+
+## CONCLUSION
+
+In this project, we conducted a comprehensive analysis of demographic information for cities in the United States, aiming to develop accurate predictive models for forecasting population sizes. Through data cleaning, integration, and imputation, we ensured the quality of our data sets, which were sourced from various sources including Wikipeida, Kaggle, and other open data platforms.
+
+Our analysis involved exploratory data analysis (EDA) to gain insights into the demographic characteristics of cities, correlation analysis to identify relationships between variables, and predictive modeling using regression-based and non-linear techniques.
+
+We evaluated several regression-based models, including linear regression, linear regression with principal component analysis (PCA), and linear regression with penalty, as well as non-linear models such as k-nearest neighbors (KNN) and random forest. Performance metrics such as Root Mean Squared Error (RMSE), R-square, and Mean Absolute Error (MAE) were used to compare the models.
+
+Additionally, we applied PCA to reduce the dimensionality of the datasets and visualize the variance explained by each principal component. The variance explained plot revealed the proportion of variability captured by each principal component, providing valuable insight into the underlying structure of the data.
+
+Our analysis highlighted the importance of data preprocessing, feature selection, and model evaluation in developing accurate predictive model for population forecasting. While certain models performed better than others, the choice of model may depend on specific use cases and the trade-off between model complexity and interpretability.
+
+In conclusion, this project contributes to the understanding of population dynamics and demographic trends in U.S. cities, offering insights into the factors influencing population size. The predictive models developed in this study can be utilized for urban planning, resource allocation, and policy-making, ultimately contributing to informed decision-making and sustainable development.
