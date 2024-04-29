@@ -697,7 +697,7 @@ Therefore, there is trade-offs between dimensionality reduction efficiency and c
 
 ## CONCLUSION
 
-In ths project, we explored various machine learning models to predict population based on several features. We employed linear regression , linear regression with PCA, linear regression with penalty, k-nearest neighbors and random forest models. Through extensive analysis and comparison, we found that random forest consistently outperformed and other models in terms of predictive accuracy, as evidenced by its lwer mean absolute error (MAE), root mean squared error (RMSE), and higher R-squared values.
+In ths project, we explored various machine learning models to predict population based on several features. We employed linear regression , linear regression with PCA, linear regression with penalty, k-nearest neighbors and random forest models. Through extensive analysis and comparison, we found that random forest consistently outperformed and other models in terms of predictive accuracy, as evidenced by its lower mean absolute error (MAE), root mean squared error (RMSE), and higher R-squared values.
 
 Interestingly, the random forest and k-nearest neighbors model demonstrated better performance compared to linear regression -based models. This suggests that the relationship between the predictors and the target variable might not be strictly linear, and these non- linear models are better suited capture complex patterns in the data.
 
