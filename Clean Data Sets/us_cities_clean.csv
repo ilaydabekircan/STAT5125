@@ -1,0 +1,345 @@
+"","city","state","region","size","avg_rent","median_rent","unemp_rate","avg_income","cost_of_living","price_parity","commute_time","median_aqi","transit_score"
+"1","New York","New York","Northeast","Large",3272,2323,3.8,85136,128,114.58,36.7,50,6.9
+"2","Los Angeles","California","West","Large",2857,1925,3.9,75821,140.6,113.82,30.7,70,6.2
+"3","Chicago","Illinois","Midwest","Large",1975,1364,4.2,71992,100.1,105.42,31.8,50,5.1
+"4","Dallas","Texas","South","Large",1754,1440,3.2,66727,98.5,103.85,28.6,51,2.8
+"5","Houston","Texas","South","Large",1620,1216,3.9,64837,95.8,99.74,30,57,2.8
+"6","Washington","District of Columbia","South","Large",2421,1740,2.8,80822,120.1,111.34,34.8,45,5.5
+"7","Philadelphia","Pennsylvania","Northeast","Large",1663,1314,3.4,72379,103.4,99.21,29.8,48,5.3
+"8","Miami","Florida","South","Large",3201,1670,1.9,73522,110.1,109.92,29.6,45,5.2
+"9","Atlanta","Georgia","South","Large",1991,1489,2.6,63219,100.3,99.12,32.1,48,2.5
+"10","Boston","Massachusetts","Northeast","Large",3419,2368,2.9,92290,132.6,109.69,31.2,44,5
+"11","Phoenix","Arizona","West","Large",1755,1584,2.7,58308,104.3,99.18,26.4,77,4.1
+"12","San Francisco","California","West","Large",3422,3000,2.4,123711,178.6,119.83,33.6,44,6.8
+"13","Riverside","California","West","Large",2399,1533,3.6,50384,116.1,105.53,32.9,84,3.8
+"14","Detroit","Michigan","Midwest","Large",1201,1024,3.2,60965,93.2,96.11,27.1,54,2.8
+"15","Seattle","Washington","West","Large",2162,2011,3.4,89274,124.6,114.57,30.8,44,5.1
+"16","Minneapolis","Minnesota","Midwest","Large",1625,1239,2.6,71912,105.4,103.58,25.3,44,3.7
+"17","San Diego","California","West","Large",3016,2055,2.9,72637,136.2,115.15,26,49,5.3
+"18","Tampa","Florida","South","Large",2146,1488,2.2,58315,101.4,98.97,27.2,46,3.3
+"19","Denver","Colorado","West","Large",1956,1665,2.8,78150,112.1,109.16,27.3,61,5.3
+"20","Baltimore","Maryland","Northeast","Large",1611,1359,3.1,70490,107,105.01,31,45,4.2
+"21","St. Louis","Missouri","Midwest","Large",1217,853,2.5,64769,89.6,96.25,26,52,3.8
+"22","Orlando","Florida","South","Large",1974,1536,2.3,53102,101.4,99.82,28.7,44,3.3
+"23","Charlotte","North Carolina","South","Large",1767,1288,3.1,62056,97.9,96.6,26.5,47,2.2
+"24","San Antonio","Texas","South","Large",1441,1138,3.3,53648,92.7,96.38,26.7,51,4.5
+"25","Portland","Oregon","West","Large",1793,1689,4.1,68374,116.5,105.37,27.5,34,6.1
+"26","Sacramento","California","West","Large",2068,1518,3.3,65972,120.3,106.29,27.1,54,4
+"27","Pittsburgh","Pennsylvania","Northeast","Large",1403,977,3.7,65730,93.1,95.15,26.7,46,3.3
+"28","Austin","Texas","South","Large",1840,1483,2.7,71372,106.6,100.04,27.1,45,2.8
+"29","Las Vegas","Nevada","West","Large",1781,1309,5.4,58276,100.7,95.54,24.7,63,4.8
+"30","Cincinnati","Ohio","Midwest","Large",1395,899,3.1,63116,92.4,94.34,24.7,51,2.5
+"31","Kansas City","Missouri","Midwest","Large",1293,1082,2.4,61410,91.6,93.66,23.2,48,2.3
+"32","Columbus","Ohio","Midwest","Large",1343,1010,3.1,59867,93.9,95.02,24,44,2.9
+"33","Indianapolis","Indiana","Midwest","Large",1303,956,2.2,65805,90.2,95.03,24.7,48,2.4
+"34","Cleveland","Ohio","Midwest","Large",1273,872,3.4,61948,90,94.2,24.6,47,4.7
+"35","San Jose","California","West","Large",3016,2763,2.1,136338,173.5,111.64,29,44,6.4
+"36","Nashville","Tennessee","South","Large",1830,1353,2.3,70026,100.1,95.53,27.6,45,1.7
+"37","Virginia Beach","Virginia","South","Large",1842,1215,3,56716,99,97.79,24,37,3.2
+"38","Providence","Rhode Island","Northeast","Large",1962,1275,2.7,64566,111.5,101.2,26,42,3.5
+"39","Jacksonville","Florida","South","Large",1657,1195,2.1,59271,99,98.73,27.5,46,2.6
+"40","Milwaukee","Wisconsin","Midwest","Large",1130,971,2.4,65803,93.8,95.61,22.7,44,4.6
+"41","Oklahoma City","Oklahoma","South","Large",1215,873,2.4,57150,87.3,92.76,22.5,50,1.7
+"42","Raleigh","North Carolina","South","Large",1640,1353,2.7,66428,99.7,97.58,25.9,43,2.3
+"43","Memphis","Tennessee","South","Large",1292,962,3.7,56568,88.2,90.62,24.4,43,2.3
+"44","Richmond","Virginia","South","Large",1454,1271,2.9,65834,99.2,97.92,25.6,39,2.4
+"45","Louisville/Jefferson County","Kentucky","South","Large",1262,931,2.7,59425,91.6,91.81,23.9,44,2.9
+"46","New Orleans","Louisiana","South","Large",1615,1075,3.5,61327,92.4,94.42,26,45,3.4
+"47","Salt Lake City","Utah","West","Large",1740,1345,2,61551,105.9,96.23,22.5,51,6.6
+"48","Hartford","Connecticut","Northeast","Large",1396,1287,NA,69951,104.8,101.71,24.5,42,3.9
+"49","Buffalo","New York","Northeast","Large",1222,971,3.2,56808,97.3,95.11,21.7,40,3.9
+"50","Birmingham","Alabama","South","Large",1211,1032,2,59107,90.7,90.86,25.8,51,0.1
+"51","Rochester","New York","Northeast","Large",1303,1009,2.9,58500,96.6,97.69,21.6,39,2.5
+"52","Grand Rapids","Michigan","Midwest","Large",1694,1070,3.1,57667,93.7,96.69,21.2,42,2.6
+"53","Tucson","Arizona","West","Large",1523,951,3.1,52942,97.7,92.92,24.4,48,3.7
+"54","Urban Honolulu","Hawaii","West","Large",2428,1892,3.4,63912,NA,114.74,29,29,6.4
+"55","Tulsa","Oklahoma","South","Large",1166,830,2.7,59941,86.7,92.02,21.8,48,1.7
+"56","Fresno","California","West","Large",1747,1060,6.2,51422,105.9,101.56,22.8,64,3.2
+"57","Worcester","Massachusetts","Northeast","Mid-Sized",1813,1361,3.3,64540,113.2,100,28.8,42,2.1
+"58","Omaha","Nebraska","Midwest","Mid-Sized",1225,940,2.5,64229,92.9,93.64,20.5,44,2.7
+"59","Bridgeport","Connecticut","Northeast","Mid-Sized",1662,1434,NA,127391,NA,105.8,30.2,44,4.5
+"60","Greenville","South Carolina","South","Mid-Sized",1545,1007,2.6,50908,95,93.51,23.7,44,0.9
+"61","Albuquerque","New Mexico","West","Mid-Sized",1503,1012,3.1,52263,92.9,92.26,23.7,54,3.6
+"62","Bakersfield","California","West","Mid-Sized",1836,927,6.7,45961,102.9,100.94,22.6,57,3.1
+"63","Albany","New York","Northeast","Mid-Sized",1475,1166,2.5,67788,100.1,99.16,23.4,39,3.6
+"64","Knoxville","Tennessee","South","Mid-Sized",1691,1024,2.6,55752,91.6,90.37,23.7,45,1.1
+"65","McAllen","Texas","South","Mid-Sized",1393,742,6.8,34503,86,87.76,21.6,45,1.1
+"66","Baton Rouge","Louisiana","South","Mid-Sized",1299,939,3,56396,91.1,93.19,25.6,46,1.8
+"67","El Paso","Texas","South","Mid-Sized",1467,884,4,44058,88.6,93.13,23.7,56,4.1
+"68","New Haven","Connecticut","Northeast","Mid-Sized",1809,1439,NA,64643,107.7,101.25,24.8,42,4.6
+"69","Allentown","Pennsylvania","Northeast","Mid-Sized",1608,1188,3.3,62618,98.9,98.31,27.9,39,2.8
+"70","Oxnard","California","West","Mid-Sized",2837,2189,3.2,73375,NA,111.4,25.7,48,3.4
+"71","North Port","Florida","South","Mid-Sized",2174,1378,2.2,69376,NA,99.31,25.9,43,3
+"72","Columbia","South Carolina","South","Mid-Sized",1393,1077,2.8,53286,91.9,93.32,24.3,42,1.7
+"73","Dayton","Ohio","Midwest","Mid-Sized",1047,809,3.5,55572,88.4,92.54,21.8,44,3.1
+"74","Charleston","South Carolina","South","Mid-Sized",2166,1484,2.5,60754,101.7,99.15,25.9,40,1.5
+"75","Stockton","California","West","Mid-Sized",1915,1257,5.2,57783,113.6,104.61,33.3,43,3
+"76","Greensboro","North Carolina","South","Mid-Sized",1421,981,3.6,51872,91,92.82,22.1,43,1.8
+"77","Cape Coral","Florida","South","Mid-Sized",2356,1240,2.9,62885,NA,99.97,27.1,41,2.3
+"78","Colorado Springs","Colorado","West","Mid-Sized",1784,1270,3,58736,102.2,96.84,22.8,48,2.3
+"79","Little Rock","Arkansas","South","Mid-Sized",1108,859,2.8,53158,88,91.97,22.5,43,1.3
+"80","Lakeland","Florida","South","Mid-Sized",1674,1010,2.7,43556,96.4,96.17,25.7,41,1.6
+"81","Des Moines","Iowa","Midwest","Mid-Sized",1091,949,2.8,61833,91.7,93.32,20,39,2.6
+"82","Akron","Ohio","Midwest","Mid-Sized",977,867,3.9,58735,89.4,93.73,22.9,43,3
+"83","Springfield","Massachusetts","Northeast","Mid-Sized",1488,1059,3.7,61523,106.5,97.79,22.9,41,4
+"84","Ogden","Utah","West","Mid-Sized",1313,1107,2,52305,99.8,93.64,22.7,49,4.7
+"85","Madison","Wisconsin","Midwest","Mid-Sized",1445,1265,1.6,69116,99.5,96.73,21.4,39,3
+"86","Provo","Utah","West","Mid-Sized",1376,1070,1.9,50616,100.9,95.84,21.2,47,3.6
+"87","Deltona","Florida","South","Mid-Sized",1863,1141,2.5,53559,NA,97.84,26.6,43,2.4
+"88","Syracuse","New York","Northeast","Mid-Sized",1350,953,3,58137,95.1,96.49,21.3,37,2.5
+"89","Durham","North Carolina","South","Mid-Sized",1617,1224,2.6,63375,99.8,95.99,24.6,41,3.2
+"90","Wichita","Kansas","Midwest","Mid-Sized",956,747,2.9,56343,86.8,90.85,20.2,45,1.7
+"91","Toledo","Ohio","Midwest","Mid-Sized",1056,739,3.9,54423,87.5,90.52,21.1,42,2.2
+"92","Augusta","Georgia","South","Mid-Sized",1280,958,3.2,49432,91.6,91.96,24,42,0.7
+"93","Palm Bay","Florida","South","Mid-Sized",1874,1233,2.2,55477,NA,98.96,24.9,42,1.9
+"94","Jackson","Mississippi","South","Mid-Sized",1158,983,3,51982,87.8,88.98,25.1,43,0.8
+"95","Harrisburg","Pennsylvania","Northeast","Mid-Sized",1217,1049,2.8,60517,95.8,97.53,22.8,38,1.7
+"96","Spokane","Washington","West","Mid-Sized",1434,980,5.5,53278,100.4,98.71,22.6,40,3.8
+"97","Scranton","Pennsylvania","Northeast","Mid-Sized",1204,868,4.3,53256,91.3,93.37,22.3,36,2.6
+"98","Chattanooga","Tennessee","South","Mid-Sized",1512,1001,2.9,53906,91.2,90.23,24.4,46,1.2
+"99","Lancaster","Pennsylvania","Northeast","Mid-Sized",1327,1105,2.5,61547,99.5,97.13,24,48,2.4
+"100","Modesto","California","West","Mid-Sized",1867,1144,5.3,52356,112.3,102.98,28.8,48,3.6
+"101","Portland","Maine","Northeast","Mid-Sized",2131,1563,NA,68555,113,101.74,25.4,38,1.7
+"102","Fayetteville","Arkansas","South","Mid-Sized",1537,824,2,70594,90.4,93.3,20.6,38,1.4
+"103","Lansing","Michigan","Midwest","Mid-Sized",1065,925,3.6,50326,88.7,94.08,21.1,41,2.9
+"104","Youngstown","Ohio","Midwest","Mid-Sized",879,675,4.5,48904,86.4,87.41,21.8,43,1.3
+"105","Fayetteville","North Carolina","South","Mid-Sized",1339,959,4.8,45542,89.5,91.68,22.6,41,1.8
+"106","Lexington","Kentucky","South","Mid-Sized",1369,909,2.6,57519,91.1,92,21.5,42,2.5
+"107","Pensacola","Florida","South","Mid-Sized",1538,1077,2.3,52548,97.9,95.82,24.5,45,1.6
+"108","Huntsville","Alabama","South","Mid-Sized",1456,941,1.8,57815,91.3,91.51,NA,43,0.8
+"109","Reno","Nevada","West","Mid-Sized",1912,1365,3.4,71489,107.4,97.42,21.3,47,3.2
+"110","Santa Rosa","California","West","Mid-Sized",2440,1848,2.5,81006,141.7,109.81,25.1,32,3.4
+"111","Myrtle Beach","South Carolina","South","Mid-Sized",1837,1052,4.1,49234,94.7,94.79,21.8,39,0.5
+"112","Lafayette","Louisiana","South","Mid-Sized",1203,930,3.1,52241,89.6,90.73,24.6,41,1
+"113","Springfield","Missouri","Midwest","Mid-Sized",1225,717,1.9,48664,86.7,89.11,22.3,43,1.7
+"114","Killeen","Texas","South","Mid-Sized",1271,804,4,47755,88.6,93.56,20.2,44,1.6
+"115","Visalia","California","West","Mid-Sized",1748,907,8.2,47986,103.6,98.98,22.4,67,4.1
+"116","Asheville","North Carolina","South","Mid-Sized",1811,1361,2.5,54827,103.3,94.7,21.6,43,1.1
+"117","York","Pennsylvania","Northeast","Mid-Sized",1191,938,2.8,57870,95.8,96.85,27.2,40,1.5
+"118","Vallejo","California","West","Mid-Sized",2117,1776,3.8,65448,125.2,109.38,32.5,40,3.9
+"119","Santa Maria","California","West","Mid-Sized",2733,2490,3.1,73995,143,111.81,19.6,43,4.3
+"120","Salinas","California","West","Mid-Sized",2118,2324,6.9,63449,138.3,109.27,23,39,4.2
+"121","Salem","Oregon","West","Mid-Sized",1680,1040,4.5,52971,105.8,101.84,24.9,30,4.2
+"122","Mobile","Alabama","South","Mid-Sized",1093,846,3,46402,88.3,87.8,24.8,42,1.7
+"123","Reading","Pennsylvania","Northeast","Mid-Sized",1173,975,3.4,57970,96,96.32,25.4,38,2.4
+"124","Manchester","New Hampshire","Northeast","Mid-Sized",1718,1354,NA,71849,109.6,102.16,26.9,41,1.7
+"125","Corpus Christi","Texas","South","Mid-Sized",1375,1104,4.5,52612,93.3,94.81,19.6,45,3.4
+"126","Brownsville","Texas","South","Mid-Sized",1330,745,5.7,37861,87.8,88.36,20.8,47,2
+"127","Fort Wayne","Indiana","Midwest","Mid-Sized",1078,790,2.2,54623,86.8,92.14,21.8,41,1.8
+"128","Salisbury","Maryland","Northeast","Mid-Sized",1444,925,4.7,55698,103.2,93.96,24.2,37,1.3
+"129","Gulfport","Mississippi","South","Mid-Sized",1212,826,3.4,44488,86.8,89.21,23,42,1
+"130","Flint","Michigan","Midwest","Mid-Sized",781,783,5.4,49399,85.7,89.16,26.5,40,1.9
+"131","Savannah","Georgia","South","Mid-Sized",1744,1204,2.5,53570,97.3,95.42,24.3,39,2.5
+"132","Peoria","Illinois","Midwest","Mid-Sized",1107,755,4.2,55784,86.7,90.49,20.3,42,1.7
+"133","Canton","Ohio","Midwest","Mid-Sized",979,685,3.9,52152,88.2,90.02,22.5,44,2.4
+"134","Anchorage","Alaska","West","Mid-Sized",1546,1096,3.5,67085,110.7,106.27,20.8,23,2.9
+"135","Beaumont","Texas","South","Mid-Sized",1331,898,6.3,49006,88.6,93.31,22.6,44,1.4
+"136","Shreveport","Louisiana","South","Mid-Sized",1076,939,3.4,55198,85.8,90.32,21.1,44,1.8
+"137","Trenton","New Jersey","Northeast","Mid-Sized",2042,1439,2.5,77911,104.3,101.89,28.7,42,4.6
+"138","Montgomery","Alabama","South","Mid-Sized",1153,882,2.5,49310,88.5,88.56,23.5,42,1.3
+"139","Davenport","Iowa","Midwest","Mid-Sized",882,778,3.7,56181,87.2,91.36,19.6,42,3
+"140","Tallahassee","Florida","South","Mid-Sized",1360,1086,2.2,52279,96.4,94.97,22.6,43,2.6
+"141","Eugene","Oregon","West","Mid-Sized",1907,1083,4.9,55146,108.4,100.61,20.6,43,4.2
+"142","Ocala","Florida","South","Mid-Sized",1602,983,2.8,45152,94.5,93.96,25,42,0.7
+"143","Naples","Florida","South","Mid-Sized",3346,1577,2.2,117984,109.4,102.19,24.5,38,1.9
+"144","Ann Arbor","Michigan","Midwest","Mid-Sized",2693,1244,3,68688,99.3,99.75,24.2,40,4.8
+"145","Hickory","North Carolina","South","Mid-Sized",1435,692,2.9,48529,89.8,89.25,22.6,42,0.4
+"146","Huntington","West Virginia","South","Mid-Sized",916,755,3.8,47505,84.3,88.54,23.3,41,1.3
+"147","Fort Collins","Colorado","West","Mid-Sized",1794,1332,2.4,64258,109.2,97.98,22.9,51,3
+"148","Lincoln","Nebraska","Midwest","Mid-Sized",1177,828,2.1,56887,94.7,93.05,19.4,37,3.2
+"149","Gainesville","Florida","South","Mid-Sized",1630,1007,2,50623,97.3,95.91,23.2,40,4
+"150","Rockford","Illinois","Midwest","Mid-Sized",890,758,5.4,51140,87.2,93.42,23.2,39,2.1
+"151","Boulder","Colorado","West","Mid-Sized",2492,1712,2.2,89593,118.7,101.32,22.1,48,5.1
+"152","Greeley","Colorado","West","Mid-Sized",1405,1162,3,56553,106.1,95.55,27.5,51,1.4
+"153","Columbus","Georgia","South","Mid-Sized",1150,884,3.3,47349,88.5,88.99,22.2,42,1.6
+"154","Green Bay","Wisconsin","Midwest","Mid-Sized",911,804,2.1,58240,91.4,92.36,20.7,38,2.1
+"155","Spartanburg","South Carolina","South","Mid-Sized",1227,922,2.9,50596,91,92.67,23.5,43,0.6
+"156","South Bend","Indiana","Midwest","Mid-Sized",1259,995,3.1,56109,87.2,91.87,22.6,43,2.5
+"157","Lubbock","Texas","South","Mid-Sized",1306,889,2.9,51045,88.8,93.95,17.3,22,2.5
+"158","Clarksville","Tennessee","South","Mid-Sized",1385,807,3.6,47519,88.7,90.56,24,43,0.7
+"159","Roanoke","Virginia","South","Mid-Sized",1268,854,2.6,53939,94.1,93.79,25.9,37,2
+"160","Evansville","Indiana","Midwest","Mid-Sized",842,825,2.3,56650,87.2,90.29,21.8,44,1.9
+"161","Kingsport","Tennessee","South","Mid-Sized",1238,663,3.1,47287,86,85.88,23,40,0.7
+"162","Kennewick","Washington","West","Mid-Sized",1662,1012,6.2,52082,99.7,100.51,22.3,34,3.9
+"163","Olympia","Washington","West","Mid-Sized",1881,1329,4.7,61062,110.9,103.59,24.6,22,3
+"164","Hagerstown","Maryland","Northeast","Mid-Sized",1389,866,2.9,51102,99.7,95.25,30.7,40,1
+"165","Utica","New York","Northeast","Mid-Sized",1450,811,3.3,52919,94.1,92.77,20.3,18,2
+"166","Duluth","Minnesota","Midwest","Mid-Sized",1607,899,3.6,53734,93.2,88.83,20.2,37,2.1
+"167","Crestview","Florida","South","Mid-Sized",1829,1220,1.9,64660,104.7,96.9,24.1,39,0.9
+"168","Longview","Texas","South","Mid-Sized",1286,901,4,48868,88.5,92.74,NA,37,0.9
+"169","San Luis Obispo","California","West","Mid-Sized",2904,1688,2.4,66617,136.1,108.56,23.1,55,2.6
+"170","Merced","California","West","Mid-Sized",1830,1093,7.4,46580,108.2,100.3,27.8,53,2.4
+"171","Waco","Texas","South","Mid-Sized",1538,840,3.2,49151,89.5,94.69,20.1,42,1.7
+"172","Sioux Falls","South Dakota","Midwest","Mid-Sized",1161,837,2,71570,92.8,93.04,18.2,37,2
+"173","Cedar Rapids","Iowa","Midwest","Mid-Sized",951,748,3.5,59063,88.1,91.84,19.7,42,2
+"174","Bremerton","Washington","West","Mid-Sized",1821,1479,4.3,67845,115,103.69,30.8,19,2.7
+"175","Erie","Pennsylvania","Northeast","Mid-Sized",1036,796,4.2,52747,91.8,92.19,19.9,31,2.9
+"176","Santa Cruz","California","West","Mid-Sized",3350,2602,4.5,85554,163.9,109.08,26.8,35,4.8
+"177","Amarillo","Texas","South","Mid-Sized",1359,847,2.6,56248,88.2,93.79,19.1,47,1.8
+"178","Tuscaloosa","Alabama","South","Mid-Sized",1421,871,2.2,43362,91,88.1,NA,37,0.8
+"179","Norwich","Connecticut","Northeast","Mid-Sized",1420,1251,3.2,63877,NA,100.03,24.8,37,1.8
+"180","College Station","Texas","South","Mid-Sized",1793,953,2.8,47803,92.3,95.12,18.1,31,1.4
+"181","Laredo","Texas","South","Mid-Sized",1283,841,3.7,40850,90.1,89.94,21.5,42,4.1
+"182","Kalamazoo","Michigan","Midwest","Mid-Sized",1320,913,3.9,58524,89.3,93.23,20.5,43,2.1
+"183","Lynchburg","Virginia","South","Mid-Sized",1260,873,2.9,47374,93.6,91.27,23.4,23,1.2
+"184","Charleston","West Virginia","South","Mid-Sized",819,814,3.3,51638,83.9,90.69,21.9,41,1.4
+"185","Yakima","Washington","West","Mid-Sized",1368,922,8.8,50872,97.5,97.72,18.7,29,2.3
+"186","Fargo","North Dakota","Midwest","Small",1209,794,1.9,62021,91.4,92.58,16.3,37,3.2
+"187","Binghamton","New York","Northeast","Small",1743,807,3.1,51295,93.3,94.62,19.2,NA,2.4
+"188","Fort Smith","Arkansas","South","Small",1112,648,2.7,45134,84.2,88.05,21.8,38,0.6
+"189","Appleton","Wisconsin","Midwest","Small",1135,797,1.9,58312,90.7,93.46,19.5,38,1.8
+"190","Macon","Georgia","South","Small",1122,907,3,46875,87.2,87.4,23.5,38,1.5
+"191","Tyler","Texas","South","Small",1493,987,3.3,60284,92.8,94.77,23.4,42,1.1
+"192","Topeka","Kansas","Midwest","Small",982,734,2.7,53655,85.6,89.22,20.5,44,1.9
+"193","Daphne","Alabama","South","Small",1473,1021,2.1,54659,96.6,92.09,NA,40,0.3
+"194","Bellingham","Washington","West","Small",1775,1169,5,58137,111.6,104.72,22.5,32,3.5
+"195","Rochester","Minnesota","Midwest","Small",1472,1069,2.5,63052,97.3,91.94,20.2,38,0.4
+"196","Burlington","Vermont","Northeast","Small",1855,1326,NA,65083,112.8,102.64,22.5,42,2.6
+"197","Lafayette","Indiana","Midwest","Small",1056,975,2,46968,88.7,92.53,19.3,38,3.6
+"198","Medford","Oregon","West","Small",1822,1039,5.1,56842,107.5,102.12,18,34,2.6
+"199","Champaign","Illinois","Midwest","Small",1010,927,3.2,55335,89,93.52,18.6,40,4.7
+"200","Lake Charles","Louisiana","South","Small",1083,833,3,51080,89.4,90.24,NA,44,0.9
+"201","Charlottesville","Virginia","South","Small",1593,1265,2.4,77070,102.1,100.28,24.3,39,2.5
+"202","Las Cruces","New Mexico","West","Small",1358,821,3.7,45045,88.8,86.14,20.4,54,1.8
+"203","Hilton Head Island","South Carolina","South","Small",2883,NA,2.8,66256,109.4,99.08,24.6,NA,0
+"204","Athens","Georgia","South","Small",1878,946,2.4,48323,95,94.41,22.7,44,2.3
+"205","Lake Havasu City","Arizona","West","Small",1716,871,3.9,41331,98.4,89.59,21.8,18,0.4
+"206","Chico","California","West","Small",1620,1011,4,54694,110.5,102.52,20.5,43,2.9
+"207","Columbia","Missouri","Midwest","Small",1181,830,1.7,53583,89.8,89.52,17.3,40,2.5
+"208","Springfield","Illinois","Midwest","Small",944,786,3.6,57126,87.5,91.86,20.2,40,2.7
+"209","Johnson City","Tennessee","South","Small",1174,788,3,48257,88.1,87.25,21.8,NA,1.1
+"210","Houma","Louisiana","South","Small",1208,819,3.2,49613,89.9,88.13,24.2,37,1.1
+"211","Monroe","Louisiana","South","Small",1211,711,3.3,46859,86.5,86.41,20,38,1.3
+"212","Jacksonville","North Carolina","South","Small",1203,850,3.7,50869,91.7,89.7,20.1,NA,0.8
+"213","Yuma","Arizona","West","Small",1535,892,13.7,44299,94.5,89.54,20,46,2
+"214","Gainesville","Georgia","South","Small",1666,1128,2.1,53920,97,94.04,NA,36,0.8
+"215","Florence","South Carolina","South","Small",1304,747,3,50386,87.7,90.62,22.5,39,0.7
+"216","Bend","Oregon","West","Small",2182,1274,4.8,67743,115.9,102.75,NA,13,2
+"217","Racine","Wisconsin","Midwest","Small",977,816,2.6,56884,90.9,92.18,24.7,40,2.9
+"218","Warner Robins","Georgia","South","Small",1319,998,2.8,48160,90.5,91.99,20.8,33,0
+"219","Saginaw","Michigan","Midwest","Small",847,753,5.5,49274,84,91.13,22.4,NA,1.8
+"220","Punta Gorda","Florida","South","Small",2898,1095,3,51677,100.3,96.3,24.2,NA,0
+"221","Terre Haute","Indiana","Midwest","Small",966,723,2.9,45537,84.7,87.39,22.6,41,1
+"222","Billings","Montana","West","Small",1466,855,2.1,59698,95.7,92.5,18.3,21,2.4
+"223","Redding","California","West","Small",1445,1081,4.1,54972,108.7,99.4,NA,44,1.8
+"224","Dover","Delaware","Northeast","Small",1507,1055,4.6,50432,101.3,95.9,27,37,2
+"225","Kingston","New York","Northeast","Small",1662,1245,2.6,60557,106.1,100.09,28.8,NA,0.9
+"226","Joplin","Missouri","Midwest","Small",1058,688,2.1,44292,85.2,88,17.7,40,0.5
+"227","Yuba City","California","West","Small",1966,1078,6.3,51174,108.7,101.54,29.1,46,2.5
+"228","Jackson","Tennessee","South","Small",1424,757,2.9,48718,85.2,85.48,NA,30,1.4
+"229","Bowling Green","Kentucky","South","Small",1325,854,3.2,43282,87,88.44,22.2,42,0.9
+"230","Abilene","Texas","South","Small",992,808,3.2,55556,89.1,92.03,19.1,NA,1.6
+"231","Muskegon","Michigan","Midwest","Small",1013,811,5,46701,87.7,92.11,21.3,39,1.4
+"232","Iowa City","Iowa","Midwest","Small",1218,996,2.3,60316,93.5,92.82,19.3,31,3
+"233","Midland","Texas","South","Small",1349,1233,2.6,125455,97.8,97.86,18.1,NA,2.1
+"234","Panama City","Florida","South","Small",1687,1216,2.1,53980,101.9,96.82,22.5,42,1.5
+"235","Auburn","Alabama","South","Small",1462,821,2,45002,91.9,89.69,23.8,NA,0
+"236","Hattiesburg","Mississippi","South","Small",1293,849,3,44538,86.1,88.61,26.8,37,0.8
+"237","Eau Claire","Wisconsin","Midwest","Small",1053,760,2.5,54814,91.8,91.92,19.4,37,1.7
+"238","Oshkosh","Wisconsin","Midwest","Small",917,799,1.9,55202,89,92.56,19,NA,2.7
+"239","Burlington","North Carolina","South","Small",1470,888,3.2,48118,91.8,89.56,23.7,NA,0.3
+"240","Coeur d'Alene","Idaho","West","Small",1866,1075,3.2,54406,103.3,93.77,22.3,10,1.1
+"241","Bloomington","Illinois","Midwest","Small",1225,852,3.1,58503,89,93.08,18.4,42,3.4
+"242","Greenville","North Carolina","South","Small",1450,872,3.5,53200,89.8,89.62,20.7,37,1.3
+"243","Waterloo","Iowa","Midwest","Small",776,785,3.1,53584,87.6,88.89,NA,40,1.4
+"244","East Stroudsburg","Pennsylvania","Northeast","Small",1933,1073,4.8,53118,96.1,97.86,39.4,42,1.1
+"245","Pueblo","Colorado","West","Small",1332,911,4.3,46927,92.2,90.92,21.4,19,2.2
+"246","Wausau","Wisconsin","Midwest","Small",884,756,1.9,56947,88.9,89.97,20,35,1.6
+"247","Blacksburg","Virginia","South","Small",1926,924,2.5,44904,94.5,92.19,20.5,40,2
+"248","Odessa","Texas","South","Small",1359,960,3.8,53610,92.7,96.52,NA,31,1.9
+"249","Janesville","Wisconsin","Midwest","Small",967,816,2.6,52787,89.8,93.06,23.5,40,2.1
+"250","Bloomington","Indiana","Midwest","Small",1621,1025,2,51899,92.4,94.12,19.7,40,2.6
+"251","Jackson","Michigan","Midwest","Small",1099,878,4.2,47503,87.4,93.8,24.4,NA,1
+"252","Sebastian","Florida","South","Small",2375,1094,2.6,95109,NA,98.16,NA,34,0
+"253","State College","Pennsylvania","Northeast","Small",1723,1206,2.8,54994,99.8,95.76,19.7,39,3.5
+"254","Idaho Falls","Idaho","West","Small",1183,830,2,55084,91.7,90.62,19.5,43,1.3
+"255","Decatur","Alabama","South","Small",1131,679,1.8,46533,88.6,86.25,NA,43,0
+"256","Madera","California","West","Small",1717,1048,6,45757,108.9,100.09,25.4,48,1.2
+"257","Chambersburg","Pennsylvania","Northeast","Small",1189,864,2.8,55139,95.7,95.18,NA,41,0
+"258","Grand Junction","Colorado","West","Small",1506,861,3.1,52121,98.1,92.47,18.1,45,2.3
+"259","Elizabethtown","Kentucky","South","Small",1250,699,3.6,50016,88.1,87.43,23.6,42,0
+"260","Santa Fe","New Mexico","West","Small",1897,1198,2.8,69528,105.1,93.39,22.1,45,3.3
+"261","Hanford","California","West","Small",1735,1102,6.8,43176,105.4,98.58,NA,67,3
+"262","Bangor","Maine","Northeast","Small",1207,954,NA,50480,98,96.69,22.2,33,1.2
+"263","Dothan","Alabama","South","Small",1450,666,2.2,49343,86.3,86.2,NA,NA,0
+"264","Florence","Alabama","South","Small",967,656,2.4,44605,86.8,85.51,NA,NA,0
+"265","Jefferson City","Missouri","Midwest","Small",850,654,1.9,51286,86.3,88.2,20.9,41,0.9
+"266","Sioux City","Iowa","Midwest","Small",1237,748,2.9,59993,87.1,90,18.2,28,2
+"267","Albany","Georgia","South","Small",859,800,3.5,45619,87.3,89.38,NA,36,1.4
+"268","Wichita Falls","Texas","South","Small",1102,814,3.3,50905,85.7,91.13,16.4,NA,1.7
+"269","Valdosta","Georgia","South","Small",1384,725,2.8,42585,89.2,88.28,19.7,35,0
+"270","Texarkana","Texas","South","Small",1154,NA,3.6,45058,86.3,88.39,NA,42,1.1
+"271","Logan","Utah","West","Small",1285,804,1.8,46903,95.2,92.02,17.1,44,2.2
+"272","Flagstaff","Arizona","West","Small",2317,1447,3.8,56914,108.5,95.55,16.6,47,2.1
+"273","Rocky Mount","North Carolina","South","Small",1301,777,5.2,48812,88.3,87.83,22.7,38,1
+"274","Lebanon","Pennsylvania","Northeast","Small",1105,887,2.6,55803,95.4,96.06,23.5,38,1.5
+"275","Winchester","Virginia","South","Small",1587,1041,2.3,56544,97.2,97.26,NA,38,0.1
+"276","Morgantown","West Virginia","South","Small",1300,834,2.8,50016,88.5,95.55,22.8,38,2.8
+"277","La Crosse","Wisconsin","Midwest","Small",1100,843,2,58414,91.8,94.91,19,37,2.3
+"278","Wheeling","West Virginia","South","Small",822,694,4.2,50716,84.1,89.27,22.8,38,1.1
+"279","Rapid City","South Dakota","Midwest","Small",1391,798,2.2,61259,94.2,91.87,NA,44,1.2
+"280","Napa","California","West","Small",2833,1959,3,90608,149.6,112.07,23.7,NA,3.3
+"281","Sumter","South Carolina","South","Small",1144,882,4,46550,88.1,86.59,22.4,NA,0.9
+"282","Springfield","Ohio","Midwest","Small",786,726,3.7,47929,87.5,87.15,21.4,42,0.9
+"283","Harrisonburg","Virginia","South","Small",1517,830,2.4,47217,95.5,94.07,19.8,36,2.1
+"284","Sherman","Texas","South","Small",1536,951,3.2,52055,91.3,93.16,NA,NA,0.7
+"285","Battle Creek","Michigan","Midwest","Small",1038,845,4.5,47789,85.9,90.59,NA,NA,1.6
+"286","Jonesboro","Arkansas","South","Small",1285,704,2.4,44554,85.2,87.3,NA,NA,1.1
+"287","Manhattan","Kansas","Midwest","Small",1220,829,2.6,51163,89.6,90.59,15.7,NA,0
+"288","Bismarck","North Dakota","Midwest","Small",1236,865,2.2,64134,93.1,94.24,19.3,39,2.2
+"289","Johnstown","Pennsylvania","Northeast","Small",801,684,4.4,49472,87.6,86.6,24.7,40,2
+"290","Carbondale","Illinois","Midwest","Small",686,NA,3.7,48769,83.5,86.79,19.9,NA,0.9
+"291","Hammond","Louisiana","South","Small",1134,821,4.2,47076,89,88.47,NA,31,0.1
+"292","The Villages","Florida","South","Small",2190,896,3.4,64282,100.7,96.07,NA,NA,0
+"293","Mount Vernon","Washington","West","Small",1812,1189,5.5,64093,110.1,100.39,26.3,31,2.8
+"294","Pittsfield","Massachusetts","Northeast","Small",1200,1161,NA,65050,106.4,95.94,21,40,1.6
+"295","Albany","Oregon","West","Small",1653,1062,5,52695,105.4,101.8,NA,20,1.4
+"296","Lawton","Oklahoma","South","Small",927,677,3.2,47807,82.8,87.48,16,45,0
+"297","Cleveland","Tennessee","South","Small",1328,754,3.1,45404,89.5,88.02,NA,NA,0
+"298","Sierra Vista","Arizona","West","Small",1464,825,3.6,49096,93.2,88.13,NA,45,0.7
+"299","Staunton","Virginia","South","Small",1077,880,2.3,51965,94.5,92.9,NA,NA,0.1
+"300","Ames","Iowa","Midwest","Small",1111,914,1.9,49320,91.5,91.26,17.6,NA,4.2
+"301","Mansfield","Ohio","Midwest","Small",1635,662,4.4,46366,86.2,88.59,NA,NA,1.1
+"302","San Angelo","Texas","South","Small",1301,903,3,60187,90.7,92.06,NA,NA,1.5
+"303","New Bern","North Carolina","South","Small",1493,NA,3.2,53762,90.2,91.24,24.6,NA,0.4
+"304","Wenatchee","Washington","West","Small",1643,1096,6.1,58009,106.6,103.11,18.2,18,3.2
+"305","Farmington","New Mexico","West","Small",1475,806,4.1,41735,88.4,89.46,25.5,50,1
+"306","Lawrence","Kansas","Midwest","Small",1454,900,2.6,51703,91.6,92.69,20.6,NA,4.3
+"307","Sheboygan","Wisconsin","Midwest","Small",887,769,1.8,58425,89.7,93.3,18.5,41,2.3
+"308","Missoula","Montana","West","Small",1627,968,2.4,61881,103.4,94.72,18.7,43,3.5
+"309","Weirton","West Virginia","South","Small",735,666,4.8,48558,82.6,89.2,24,44,0.1
+"310","Watertown","New York","Northeast","Small",1313,1013,3.9,53130,96.4,93.96,NA,34,0
+"311","California","Maryland","Northeast","Small",1904,1405,2.9,65762,104.8,96.45,34.5,NA,1.6
+"312","Brunswick","Georgia","South","Small",1531,875,2.6,51400,94.4,90.14,NA,37,0
+"313","Michigan City","Indiana","Midwest","Small",1028,790,3.3,49508,87.8,90.94,NA,38,0.7
+"314","Muncie","Indiana","Midwest","Small",993,740,2.4,45325,83.7,89.13,20.1,39,3
+"315","Lewiston","Maine","Northeast","Small",990,869,NA,49766,99.7,93.99,NA,31,1.2
+"316","Longview","Washington","West","Small",1775,943,5.8,54550,101.6,98.79,NA,13,2
+"317","Kankakee","Illinois","Midwest","Small",1150,867,5.1,53165,91,92.21,24.5,NA,2.5
+"318","Ithaca","New York","Northeast","Small",1916,1406,2.4,51377,101.7,102.35,17,39,3.3
+"319","Grand Forks","North Dakota","Midwest","Small",913,750,2.3,58295,90.7,90.09,16.4,NA,2.5
+"320","Fond du Lac","Wisconsin","Midwest","Small",994,772,1.8,56378,88,92.22,NA,37,1.4
+"321","Sebring","Florida","South","Small",1313,830,3.6,41568,93.1,90.02,NA,39,0.1
+"322","Cheyenne","Wyoming","West","Small",1310,797,3.3,58646,96.9,92.85,NA,43,2
+"323","Hot Springs","Arkansas","South","Small",1034,711,3.5,46897,87.3,89.21,NA,33,0.9
+"324","Dubuque","Iowa","Midwest","Small",947,751,3.2,56782,89.6,87.93,16,NA,3.1
+"325","Victoria","Texas","South","Small",1167,1002,3.8,58294,89.5,92.09,NA,34,2.1
+"326","Cape Girardeau","Missouri","Midwest","Small",979,730,2.2,48447,88.1,88.56,NA,NA,0
+"327","Fairbanks","Alaska","West","Small",1605,1204,3.6,65314,107.9,103.94,17.5,39,2
+"328","Corvallis","Oregon","West","Small",1885,1239,3.6,54174,110.6,101.8,19,16,3
+"329","Cumberland","Maryland","Northeast","Small",872,699,4,47576,90.9,91.24,24.4,NA,1.4
+"330","Pocatello","Idaho","West","Small",982,715,2.2,45244,90.8,88.83,17.1,40,2.7
+"331","Parkersburg","West Virginia","South","Small",1045,730,3.7,51674,84.7,89.47,NA,39,2.1
+"332","Grants Pass","Oregon","West","Small",1799,951,6.5,54466,106.6,98.64,NA,20,1.4
+"333","Great Falls","Montana","West","Small",1119,743,2.4,53765,91.1,87.18,NA,15,0
+"334","Kokomo","Indiana","Midwest","Small",814,748,4.3,47031,84.9,90.81,NA,40,0
+"335","Midland","Michigan","Midwest","Small",1465,790,4.1,62055,87,91.66,NA,NA,0.3
+"336","Bloomsburg","Pennsylvania","Northeast","Small",1116,NA,3.6,53309,93.2,89.78,21,NA,0
+"337","Columbus","Indiana","Midwest","Small",1144,991,1.9,61136,89.1,91.99,NA,41,0
+"338","Hinesville","Georgia","South","Small",1523,1025,2.8,41012,90.8,93.58,NA,NA,0
+"339","Casper","Wyoming","West","Small",1122,787,3.9,70175,94.2,91.34,NA,43,1.8
+"340","Grand Island","Nebraska","Midwest","Small",860,NA,2.4,52472,88.8,88.9,NA,21,0
+"341","Danville","Illinois","Midwest","Small",657,705,4.8,49265,83.9,88.35,NA,NA,1.2
+"342","Enid","Oklahoma","South","Small",994,723,2.5,48861,82.9,NA,NA,NA,0
+"343","Walla Walla","Washington","West","Small",1734,1018,4.9,53845,100.9,99.17,17.9,37,2.8
+"344","Carson City","Nevada","West","Small",1683,1043,3.9,60445,103,94.16,NA,42,2.7
