@@ -171,8 +171,6 @@ head(features3)
 In this data set, some columns like region and size are given as characters while they should be represented as factors so their types are corrected. Also, unnecessary columns are removed such as X (represents index of rows). Since bike score and walk score columns have more than 75% missing values and we already have a column that represents transit score, we removed those as well. Also, the population column is removed because the target variable (population) is already taken in the first data set which we will join them in the next steps.
 
 ```{r}
-# https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us
-
 csv3 <- read.csv("/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/estate of city.csv")
 
 features4 <- csv3 |>

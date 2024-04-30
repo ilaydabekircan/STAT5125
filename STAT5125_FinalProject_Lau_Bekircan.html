@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Hei Yee Lau &amp; Ilayda Bekircan">
+
+<title>US City Population Prediction Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/clipboard/clipboard.min.js"></script>
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/quarto.js"></script>
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/popper.min.js"></script>
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/anchor.min.js"></script>
+<link href="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="STAT5125_FinalProject_Lau_Bekircan_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="STAT5125_FinalProject_Lau_Bekircan_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="STAT5125_FinalProject_Lau_Bekircan_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="STAT5125_FinalProject_Lau_Bekircan_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">US City Population Prediction Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Hei Yee Lau &amp; Ilayda Bekircan </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="objective" class="level2">
+<h2 class="anchored" data-anchor-id="objective">OBJECTIVE</h2>
+<p>The objective of this project is to conduct a comprehensive analysis of demographic information of cities in the United States. Through statistical processing and predictive modeling techniques, we aim to uncover patterns and trends in population dynamics, including factors such as age distribution, ethnic variety and house prices. By understanding the relationship between these variables, this project seeks to develop accurate predictive models capable of forecasting the population sizes for the selected cities. Additionally, the study intends to provide valuable insights into the social, economic, and environmental factors influencing population.</p>
+<p>This project involves data cleaning, integration of several data sets, and imputation to ensure data quality. Following the preprocessing, we conduct exploratory analysis to gain insights into the demographic characteristics of various U.S. cities. Then, the data will be divided into training and testing sets for the evaluation of predictive models. Several regression-based models, including linear regression, linear regression with principal component analysis (PCA), and linear regression with penalty, along with non-linear models such as k-nearest neighbors (KKNN) and random forest, will be implemented and compared by using key performance metrics including Root Mean Squared Error (RMSE), R-squared (R^2), and Mean Absolute Error (MAE). By evaluating different modeling approaches and conducting PCA analysis, this project seeks to provide valuable insights about the predictive capabilities of various regression techniques and their applicability to demographic data analysis.</p>
+</section>
+<section id="data-description" class="level2">
+<h2 class="anchored" data-anchor-id="data-description">DATA DESCRIPTION</h2>
+<p>There are four different data sets used in this project to gather information about the population, demographic information and some external information that might affect population of cities in the United States. Below are the data sets along with explanations of their features. Any removed features are not explained in this section.</p>
+<p>The first data set is sourced from Wikipedia (<a href="https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population" class="uri">https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population</a>) to have the population information which is the target of the predictive models in this project.</p>
+<p><strong>city:</strong> the name of the city in the United States</p>
+<p><strong>state_code:</strong> the code assigned to the state in which the city is located and it is typically standardized with two-letter abbreviations</p>
+<p><strong>population:</strong> the number of individuals residing within the city limits and this is the target variable of the models in this project</p>
+<p><strong>land_area_km2:</strong> the total land area occupied by the city, measured in square kilometers</p>
+<p>The second data set contains information mainly about city demographics which is sourced from <a href="https://public.opendatasoft.com/explore/dataset/us-cities-demographics/table/?flg=en-us" class="uri">https://public.opendatasoft.com/explore/dataset/us-cities-demographics/table/?flg=en-us</a> . It also has city and state code features which will be used to join the data after cleaning all individual data sets.</p>
+<p><strong>state:</strong> the full name of the state in which the city is located</p>
+<p><strong>median_age:</strong> the median age of the population within the city which represents the midpoint of the age distribution</p>
+<p><strong>male:</strong> the percentage of the male residents within the city</p>
+<p><strong>female:</strong> the percentage of the female residents within the city</p>
+<p><strong>average_household_size:</strong> the average number of individuals living in each household within the city which can influence various social and economic factors</p>
+<p><strong>white:</strong> the percentage of individuals who identify themselves as White or Caucasian within the city</p>
+<p><strong>american:</strong> the percentage of individuals who identify themselves as American Indian or Alaska Native within the city</p>
+<p><strong>hispanic:</strong> the percentage of individuals who identify themselves as Hispanic or Latino within the city</p>
+<p><strong>black:</strong> the percentage of individuals who identify themselves as Black or African American within the city</p>
+<p><strong>asian:</strong> the percentage of individuals who identify themselves as Asian within the city</p>
+<p><strong>perc_veterans:</strong> the percentage of residents within the city who are military veterans</p>
+<p><strong>perc_foreign_born:</strong> the percentage of residents within the city who were born outside of the United States which indicates the level of international migration and cultural diversity within the population</p>
+<p>The third data set is obtained from Kaggle (<a href="https://www.kaggle.com/datasets/denissad/us-cities" class="uri">https://www.kaggle.com/datasets/denissad/us-cities</a>) It provides insights about various city attributes, including economic indicators, demographic characteristics, and quality of life metrics.</p>
+<p><strong>region:</strong> thegeographical area in which the city belongs and the regions are given as factors with Northeast, Midwest, South and West</p>
+<p><strong>size:</strong> thesize of the city given as factors with large, mid-sized, small</p>
+<p><strong>avg_rent:</strong> the average rental price for housing which provides information about cost of living and housing affordability for residents</p>
+<p><strong>median_rent:</strong> the median rental price for housing which can provide a measure of central tendency that may be more representative of typical rental prices than the average rent</p>
+<p><strong>unemp_rate:</strong> the percentage of the labor force for the residents who are unemployed and actively seeking employment and this is a key economic indicator for the city</p>
+<p><strong>avg_income: t</strong>he average income earned by residents, which provides insight about the economic prosperity and standard of living within the city</p>
+<p><strong>cost_of_living:</strong> the overall cost of living index, which takes into account factors such as housing, transportation, groceries, healthcare</p>
+<p><strong>price_parity:</strong> the purchasing power parity (PPP) of the city, which provides insight about the relative affordability and purchasing power of residents</p>
+<p><strong>commute_time:</strong> the average time that takes for residents to commute to work or other destinations within the city</p>
+<p><strong>median_aqi:</strong> the median value of the Air Quality Index (AQI), which measures the level of air pollution and its potential impact on health</p>
+<p><strong>transit_score:</strong> the score that evaluates the accessibility and quality of public transportation</p>
+<p>The fourth and final data set included in this project is sourced from Kaggle (<a href="https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us" class="uri">https://www.kaggle.com/datasets/polartech/number-of-houses-on-sale-in-all-cities-in-the-us</a>). This data set gives information about only house sale prices.</p>
+<p><strong>avg_price:</strong> the average sale price of houses within the city, which gives insight about the real estate landscape in that area</p>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">ANALYSIS</h2>
+<section id="data-preprocessing" class="level3">
+<h3 class="anchored" data-anchor-id="data-preprocessing">Data Preprocessing</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)     </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>html1 <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population"</span>) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>web1 <span class="ot">&lt;-</span> <span class="fu">html_table</span>(html1)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>target <span class="ot">&lt;-</span> web1[[<span class="dv">3</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">city =</span> <span class="fu">str_remove</span>(city, <span class="st">"</span><span class="sc">\\</span><span class="st">[.</span><span class="sc">\\</span><span class="st">]"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_remove</span>(., <span class="st">"^x"</span>), <span class="fu">starts_with</span>(<span class="st">"x"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">"2022"</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>change,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>location) <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">land_area_mi2 =</span> <span class="st">'2020_land_area'</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">land_area_km2 =</span> <span class="st">'2020_land_area_1'</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">population =</span> <span class="st">'2020census'</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">density_mi2 =</span> <span class="st">'2020_density'</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">density_km2 =</span> <span class="st">'2020_density_1'</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">state_code =</span> st) <span class="sc">|&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">str_replace_all</span>(., <span class="st">","</span>, <span class="st">""</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">c</span>(<span class="st">"population"</span>, <span class="st">"land_area_mi2"</span>, <span class="st">"land_area_km2"</span>, <span class="st">"density_mi2"</span>, <span class="st">"density_km2"</span>), as.numeric) <span class="sc">|&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>land_area_mi2,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>density_mi2,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>density_km2)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(target)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          city state_code population land_area_km2
+1     New York         NY    8804190         778.3
+2  Los Angeles         CA    3898747        1216.0
+3      Chicago         IL    2746388         589.7
+4      Houston         TX    2304580        1658.6
+5      Phoenix         AZ    1608139        1341.6
+6 Philadelphia         PA    1603797         348.1</code></pre>
+</div>
+</div>
+<p>We tidy the first data set which includes our target variable. The first row of the data set shows the column names so we slice the first row to only have observations. Some city names have unnecessary characters such as “[c]” so we use regular expression to standardize the city names. Regular expression is also used to change “.” in numerical columns to standardize the values. Unnecessary columns are dropped such as land area in inch squared because it is highly correlated with land area in km squared. When scraping, all columns are scraped as character columns so some of the columns are changed to numeric type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>csv1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us-cities-demographics.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>features2 <span class="ot">&lt;-</span> csv1 <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> race,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> count) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">american =</span> american_indian_and_alaska_native,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">hispanic =</span> hispanic_or_latino,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">black =</span> black_or_african_american,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">male =</span> male_population,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">female =</span> female_population) <span class="sc">|&gt;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">male =</span> <span class="fu">round</span>(male<span class="sc">/</span>(male<span class="sc">+</span>female),<span class="dv">4</span>),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">female =</span> <span class="dv">1</span><span class="sc">-</span>male) <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">white =</span> white<span class="sc">/</span>(white <span class="sc">+</span> american <span class="sc">+</span> hispanic <span class="sc">+</span> black <span class="sc">+</span> asian),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">american =</span> american<span class="sc">/</span>(white <span class="sc">+</span> american <span class="sc">+</span> hispanic <span class="sc">+</span> black <span class="sc">+</span> asian),</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">hispanic =</span> hispanic<span class="sc">/</span>(white<span class="sc">+</span>american<span class="sc">+</span>hispanic<span class="sc">+</span>black<span class="sc">+</span>asian),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">black =</span> black<span class="sc">/</span>(white <span class="sc">+</span> american <span class="sc">+</span> hispanic <span class="sc">+</span> black <span class="sc">+</span> asian),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">asian =</span> asian<span class="sc">/</span>(white <span class="sc">+</span> american <span class="sc">+</span> hispanic <span class="sc">+</span> black <span class="sc">+</span> asian)) <span class="sc">|&gt;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_veterans =</span> number_of_veterans <span class="sc">/</span> total_population,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc_foreign_born =</span> foreign_born <span class="sc">/</span> total_population) <span class="sc">|&gt;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>total_population,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>number_of_veterans,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>foreign_born)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(features2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 14
+  city     state median_age  male female average_household_size state_code white
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;                  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1 Newark   New …       34.6 0.490  0.510                   2.73 NJ         0.231
+2 Peoria   Illi…       33.1 0.474  0.526                   2.4  IL         0.599
+3 O'Fallon Miss…       36   0.491  0.509                   2.77 MO         0.867
+4 Hampton  Virg…       35.5 0.485  0.515                   2.48 VA         0.421
+5 Lakewood Colo…       37.7 0.498  0.502                   2.29 CO         0.751
+6 Mesa     Ariz…       36.9 0.498  0.502                   2.68 AZ         0.691
+# ℹ 6 more variables: american &lt;dbl&gt;, hispanic &lt;dbl&gt;, black &lt;dbl&gt;, asian &lt;dbl&gt;,
+#   perc_veterans &lt;dbl&gt;, perc_foreign_born &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>In this data set, each city is duplicated several times with different race information. For example, Newark has 5 rows for each race (white, american, hispanic, black and asian) with their population count. Therefore, we used pivot_wider to create a column for each race. Since the sum of all race populations give the exact population, it gets highly correlated with the target variable, city population. Therefore, we converted the race populations into percentages to use this demographic information in the models. The same procedure is applied for female/male, number of veterans and foreign born columns to represent the the groups’ population as percentages. After this process, the unnecessary columns are dropped.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>csv2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/us_cities.csv"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>features3 <span class="ot">&lt;-</span> csv2 <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>x,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>latitude,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>longitude) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">as.factor</span>(region),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">size =</span> <span class="fu">as.factor</span>(size),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">avg_rent =</span> <span class="fu">as.double</span>(avg_rent)) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>population,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>bike_score,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span>walk_score) <span class="co"># more than 75% of null values for bike_score and walk_score</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(features3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         city                state    region  size avg_rent median_rent
+1    New York             New York Northeast Large     3272        2323
+2 Los Angeles           California      West Large     2857        1925
+3     Chicago             Illinois   Midwest Large     1975        1364
+4      Dallas                Texas     South Large     1754        1440
+5     Houston                Texas     South Large     1620        1216
+6  Washington District of Columbia     South Large     2421        1740
+  unemp_rate avg_income cost_of_living price_parity commute_time median_aqi
+1        3.8      85136          128.0       114.58         36.7         50
+2        3.9      75821          140.6       113.82         30.7         70
+3        4.2      71992          100.1       105.42         31.8         50
+4        3.2      66727           98.5       103.85         28.6         51
+5        3.9      64837           95.8        99.74         30.0         57
+6        2.8      80822          120.1       111.34         34.8         45
+  transit_score
+1           6.9
+2           6.2
+3           5.1
+4           2.8
+5           2.8
+6           5.5</code></pre>
+</div>
+</div>
+<p>In this data set, some columns like region and size are given as characters while they should be represented as factors so their types are corrected. Also, unnecessary columns are removed such as X (represents index of rows). Since bike score and walk score columns have more than 75% missing values and we already have a column that represents transit score, we removed those as well. Also, the population column is removed because the target variable (population) is already taken in the first data set which we will join them in the next steps.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>csv3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/ilaydabekircan/Documents/SPRING'23/STAT5125/Project/estate of city.csv"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>features4 <span class="ot">&lt;-</span> csv3 <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>count)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(features4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          city avg_price
+1      Chicago  505870.9
+2     New York 2985802.4
+3      Houston  542926.3
+4     Brooklyn 1279951.1
+5 Philadelphia  399897.6
+6  San Antonio  365063.6</code></pre>
+</div>
+</div>
+<p>This data set only contains city information, the count of housing sales and average prices of the houses. We remove the count of housing sales since it might be very dynamic and fluctuate in a short period of time. However, the average price is used which can be a good indicator for the cost of living in the cities which is related to the population.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>trial1 <span class="ot">&lt;-</span> target <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(features2,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"city"</span>, <span class="st">"state_code"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(features4,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"city"</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trial1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          city state_code population land_area_km2        state median_age
+1     New York         NY    8804190         778.3     New York       36.0
+2  Los Angeles         CA    3898747        1216.0   California       35.0
+3      Chicago         IL    2746388         589.7     Illinois       34.2
+4      Houston         TX    2304580        1658.6        Texas       32.6
+5      Phoenix         AZ    1608139        1341.6      Arizona       33.8
+6 Philadelphia         PA    1603797         348.1 Pennsylvania       34.1
+    male female average_household_size     white    american  hispanic
+1 0.4774 0.5226                   2.68 0.3871113 0.014972022 0.4154381
+2 0.4932 0.5068                   2.86 0.4273248 0.021847221 0.6784602
+3 0.4852 0.5148                   2.53 0.4226759 0.012422711 0.4237712
+4 0.5002 0.4998                   2.66 0.4427973 0.007541598 0.5938132
+5 0.5034 0.4966                   2.89 0.5604236 0.045826335 0.7706746
+6 0.4729 0.5271                   2.61 0.3958012 0.016659600 0.2120519
+      black     asian perc_veterans perc_foreign_born avg_price
+1 0.6269275 0.9999989    0.01835714         0.3757132 2985802.4
+2 0.4410960 0.9999969    0.02150535         0.3739839 2378753.1
+3 0.8174048 0.9999914    0.02648062         0.2107889  505870.9
+4 0.7527961 0.9999897    0.03127866         0.3028807  542926.3
+5 0.6668845 0.9999692    0.04631347         0.1923876  613359.1
+6 0.8492192 0.9999880    0.03955170         0.1310026  399897.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>trial2 <span class="ot">&lt;-</span> target <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(features2,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"city"</span>, <span class="st">"state_code"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(features3,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"city"</span>, <span class="st">"state"</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(features4,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"city"</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trial2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          city state_code population land_area_km2        state median_age
+1     New York         NY    8804190         778.3     New York       36.0
+2  Los Angeles         CA    3898747        1216.0   California       35.0
+3      Chicago         IL    2746388         589.7     Illinois       34.2
+4      Houston         TX    2304580        1658.6        Texas       32.6
+5      Phoenix         AZ    1608139        1341.6      Arizona       33.8
+6 Philadelphia         PA    1603797         348.1 Pennsylvania       34.1
+    male female average_household_size     white    american  hispanic
+1 0.4774 0.5226                   2.68 0.3871113 0.014972022 0.4154381
+2 0.4932 0.5068                   2.86 0.4273248 0.021847221 0.6784602
+3 0.4852 0.5148                   2.53 0.4226759 0.012422711 0.4237712
+4 0.5002 0.4998                   2.66 0.4427973 0.007541598 0.5938132
+5 0.5034 0.4966                   2.89 0.5604236 0.045826335 0.7706746
+6 0.4729 0.5271                   2.61 0.3958012 0.016659600 0.2120519
+      black     asian perc_veterans perc_foreign_born    region  size avg_rent
+1 0.6269275 0.9999989    0.01835714         0.3757132 Northeast Large     3272
+2 0.4410960 0.9999969    0.02150535         0.3739839      West Large     2857
+3 0.8174048 0.9999914    0.02648062         0.2107889   Midwest Large     1975
+4 0.7527961 0.9999897    0.03127866         0.3028807     South Large     1620
+5 0.6668845 0.9999692    0.04631347         0.1923876      West Large     1755
+6 0.8492192 0.9999880    0.03955170         0.1310026 Northeast Large     1663
+  median_rent unemp_rate avg_income cost_of_living price_parity commute_time
+1        2323        3.8      85136          128.0       114.58         36.7
+2        1925        3.9      75821          140.6       113.82         30.7
+3        1364        4.2      71992          100.1       105.42         31.8
+4        1216        3.9      64837           95.8        99.74         30.0
+5        1584        2.7      58308          104.3        99.18         26.4
+6        1314        3.4      72379          103.4        99.21         29.8
+  median_aqi transit_score avg_price
+1         50           6.9 2985802.4
+2         70           6.2 2378753.1
+3         50           5.1  505870.9
+4         57           2.8  542926.3
+5         77           4.1  613359.1
+6         48           5.3  399897.6</code></pre>
+</div>
+</div>
+<p>We joined the data sets by their city and state information using left_join because out reference data set is the one that has the target variable. We created two main data sets to conduct models which will be explained in the next step.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(trial1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(trial2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The first joined data set (trial1) includes only three data set (excluding the third data set with information such as cost of living, commute time and median aqi). The second data set includes all four data sets. The reason why we used two different data sets to model them separately is the difference in their missing values percentages. The first data set has only 4.5% missing values total and the maximum missing percentage for a column is 8. However, the second data set has 24.4% total missing information while the maximum missing percentage of a column is 56. For both data sets, we will impute the missing values. Both data sets have their own advantages and disadvantages. The first data set has less features than the second data set which might cause poorly performance for the model because of containing less information. On the contrary, the second data set more missing values which might cause poor prediction power if imputing process isn’t handled well. Therefore, we will conduct the models with same parameters for each data set and compare their performance at the end.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#imputation based on KNN</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(VIM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: colorspace</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: grid</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>VIM is ready to use.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Suggestions and bug-reports can be submitted at: https://github.com/statistikat/VIM/issues</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'VIM'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:datasets':
+
+    sleep</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>trial1 <span class="ot">&lt;-</span> <span class="fu">select</span>(trial1, <span class="sc">-</span><span class="fu">c</span>(city, state_code, state))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>trial1 <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(pct_miss)) <span class="sc">|&gt;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  variable   n_miss pct_miss
+  &lt;chr&gt;       &lt;int&gt;    &lt;dbl&gt;
+1 white          26     7.81
+2 american       26     7.81
+3 hispanic       26     7.81
+4 black          26     7.81
+5 asian          26     7.81
+6 median_age     17     5.11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>knn_impute_t1 <span class="ot">&lt;-</span> trial1 <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">nabular</span>(<span class="at">only_miss =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">kNN</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"land_area_km2"</span> ,<span class="st">"median_age"</span>, <span class="st">"male"</span>, <span class="st">"female"</span>, <span class="st">"average_household_size"</span>, <span class="st">"white"</span>, <span class="st">"american"</span>, <span class="st">"hispanic"</span>, <span class="st">"black"</span>, <span class="st">"asian"</span>, <span class="st">"perc_veterans"</span>, <span class="st">"perc_foreign_born"</span>, <span class="st">"avg_price"</span>),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">dist_var =</span> <span class="fu">c</span>(<span class="st">"land_area_km2"</span> ,<span class="st">"median_age"</span>, <span class="st">"male"</span>, <span class="st">"female"</span>, <span class="st">"average_household_size"</span>, <span class="st">"white"</span>, <span class="st">"american"</span>, <span class="st">"hispanic"</span>, <span class="st">"black"</span>, <span class="st">"asian"</span>, <span class="st">"perc_veterans"</span>, <span class="st">"perc_foreign_born"</span>, <span class="st">"avg_price"</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>knn_impute_t1 <span class="ot">&lt;-</span> knn_impute_t1 <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">"NA"</span>),</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">"imp"</span>))</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>knn_impute_t1 <span class="sc">|&gt;</span> </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(pct_miss)) <span class="sc">|&gt;</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  variable               n_miss pct_miss
+  &lt;chr&gt;                   &lt;int&gt;    &lt;dbl&gt;
+1 population                  0        0
+2 land_area_km2               0        0
+3 median_age                  0        0
+4 male                        0        0
+5 female                      0        0
+6 average_household_size      0        0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(knn_impute_t1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  population land_area_km2 median_age   male female average_household_size
+1    8804190         778.3       36.0 0.4774 0.5226                   2.68
+2    3898747        1216.0       35.0 0.4932 0.5068                   2.86
+3    2746388         589.7       34.2 0.4852 0.5148                   2.53
+4    2304580        1658.6       32.6 0.5002 0.4998                   2.66
+5    1608139        1341.6       33.8 0.5034 0.4966                   2.89
+6    1603797         348.1       34.1 0.4729 0.5271                   2.61
+      white    american  hispanic     black     asian perc_veterans
+1 0.3871113 0.014972022 0.4154381 0.6269275 0.9999989    0.01835714
+2 0.4273248 0.021847221 0.6784602 0.4410960 0.9999969    0.02150535
+3 0.4226759 0.012422711 0.4237712 0.8174048 0.9999914    0.02648062
+4 0.4427973 0.007541598 0.5938132 0.7527961 0.9999897    0.03127866
+5 0.5604236 0.045826335 0.7706746 0.6668845 0.9999692    0.04631347
+6 0.3958012 0.016659600 0.2120519 0.8492192 0.9999880    0.03955170
+  perc_foreign_born avg_price
+1         0.3757132 2985802.4
+2         0.3739839 2378753.1
+3         0.2107889  505870.9
+4         0.3028807  542926.3
+5         0.1923876  613359.1
+6         0.1310026  399897.6</code></pre>
+</div>
+</div>
+<p>Before imputation, city name, state name and state code columns are removed since they are only for joining the data sets and they will not be used in the modelling parts. Before KNN imputation, we print the columns maximum missing percentage and missing count. In the imputation part of the code, we perform KNN imputation on missing values for the specified variables of trial1 using ‘variable’ argument to specify the target variables for imputation and ‘dist_var’ argurment to specify the variables for calculating distances between observations for finding the nearest neighbors. After imputation, missing counts and percentages are printed to double check if the imputation works and if there is any missing values left.</p>
+<p>We prefer KNN method because it imputes the missing values based on the similarities of other observations. Also, it doesn’t make any assumptions about the distribution of the data which makes it suitable for our data set. Since we have not only numerical but also categorical variables (factors), using KNN is preferable for this data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#imputation based on KNN</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>trial2 <span class="ot">&lt;-</span> <span class="fu">select</span>(trial2, <span class="sc">-</span><span class="fu">c</span>(city, state_code, state))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>trial2 <span class="sc">|&gt;</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(pct_miss)) <span class="sc">|&gt;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  variable       n_miss pct_miss
+  &lt;chr&gt;           &lt;int&gt;    &lt;dbl&gt;
+1 unemp_rate        186     55.9
+2 cost_of_living    186     55.9
+3 commute_time      186     55.9
+4 median_aqi        185     55.6
+5 region            182     54.7
+6 size              182     54.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>knn_impute_t2 <span class="ot">&lt;-</span> trial2 <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">nabular</span>(<span class="at">only_miss =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">kNN</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"land_area_km2"</span>, <span class="st">"median_age"</span>, <span class="st">"male"</span>, <span class="st">"female"</span>, <span class="st">"average_household_size"</span>, <span class="st">"white"</span>, <span class="st">"american"</span>, <span class="st">"hispanic"</span>, <span class="st">"black"</span>, <span class="st">"asian"</span>, <span class="st">"perc_veterans"</span>, <span class="st">"perc_foreign_born"</span>, <span class="st">"region"</span>, <span class="st">"size"</span>, <span class="st">"avg_rent"</span>, <span class="st">"median_rent"</span>, <span class="st">"unemp_rate"</span>, <span class="st">"avg_income"</span>, <span class="st">"cost_of_living"</span>, <span class="st">"price_parity"</span>, <span class="st">"commute_time"</span>, <span class="st">"median_aqi"</span>, <span class="st">"transit_score"</span>, <span class="st">"avg_price"</span>),</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">dist_var =</span> <span class="fu">c</span>(<span class="st">"land_area_km2"</span>, <span class="st">"median_age"</span>, <span class="st">"male"</span>, <span class="st">"female"</span>, <span class="st">"average_household_size"</span>, <span class="st">"white"</span>, <span class="st">"american"</span>, <span class="st">"hispanic"</span>, <span class="st">"black"</span>, <span class="st">"asian"</span>, <span class="st">"perc_veterans"</span>, <span class="st">"perc_foreign_born"</span>, <span class="st">"region"</span>, <span class="st">"size"</span>, <span class="st">"avg_rent"</span>, <span class="st">"median_rent"</span>, <span class="st">"unemp_rate"</span>, <span class="st">"avg_income"</span>, <span class="st">"cost_of_living"</span>, <span class="st">"price_parity"</span>, <span class="st">"commute_time"</span>, <span class="st">"median_aqi"</span>, <span class="st">"transit_score"</span>, <span class="st">"avg_price"</span>))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>knn_impute_t2 <span class="ot">&lt;-</span> knn_impute_t2 <span class="sc">|&gt;</span> </span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">"NA"</span>),</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>         <span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">"imp"</span>))</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>knn_impute_t2 <span class="sc">|&gt;</span> </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">miss_var_summary</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(pct_miss)) <span class="sc">|&gt;</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  variable               n_miss pct_miss
+  &lt;chr&gt;                   &lt;int&gt;    &lt;dbl&gt;
+1 population                  0        0
+2 land_area_km2               0        0
+3 median_age                  0        0
+4 male                        0        0
+5 female                      0        0
+6 average_household_size      0        0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(knn_impute_t2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  population land_area_km2 median_age   male female average_household_size
+1    8804190         778.3       36.0 0.4774 0.5226                   2.68
+2    3898747        1216.0       35.0 0.4932 0.5068                   2.86
+3    2746388         589.7       34.2 0.4852 0.5148                   2.53
+4    2304580        1658.6       32.6 0.5002 0.4998                   2.66
+5    1608139        1341.6       33.8 0.5034 0.4966                   2.89
+6    1603797         348.1       34.1 0.4729 0.5271                   2.61
+      white    american  hispanic     black     asian perc_veterans
+1 0.3871113 0.014972022 0.4154381 0.6269275 0.9999989    0.01835714
+2 0.4273248 0.021847221 0.6784602 0.4410960 0.9999969    0.02150535
+3 0.4226759 0.012422711 0.4237712 0.8174048 0.9999914    0.02648062
+4 0.4427973 0.007541598 0.5938132 0.7527961 0.9999897    0.03127866
+5 0.5604236 0.045826335 0.7706746 0.6668845 0.9999692    0.04631347
+6 0.3958012 0.016659600 0.2120519 0.8492192 0.9999880    0.03955170
+  perc_foreign_born    region  size avg_rent median_rent unemp_rate avg_income
+1         0.3757132 Northeast Large     3272        2323        3.8      85136
+2         0.3739839      West Large     2857        1925        3.9      75821
+3         0.2107889   Midwest Large     1975        1364        4.2      71992
+4         0.3028807     South Large     1620        1216        3.9      64837
+5         0.1923876      West Large     1755        1584        2.7      58308
+6         0.1310026 Northeast Large     1663        1314        3.4      72379
+  cost_of_living price_parity commute_time median_aqi transit_score avg_price
+1          128.0       114.58         36.7         50           6.9 2985802.4
+2          140.6       113.82         30.7         70           6.2 2378753.1
+3          100.1       105.42         31.8         50           5.1  505870.9
+4           95.8        99.74         30.0         57           2.8  542926.3
+5          104.3        99.18         26.4         77           4.1  613359.1
+6          103.4        99.21         29.8         48           5.3  399897.6</code></pre>
+</div>
+</div>
+<p>The same procedure as trial1 is applied to trial2 to impute the missing values with KNN imputation. We don’t use the target variable (population) in both imputation processes to prevent any data leakage. Our goal in imputation is to replace the missing values by using other observations but we need to avoid the information from target to prevent from overfitting and potential bias.</p>
+</section>
+<section id="exploratory-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#EDA</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(knn_impute_t1<span class="sc">$</span>population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  89956  116317  155984  293392  262527 8804190 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(knn_impute_t2<span class="sc">$</span>population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  89956  116317  155984  293392  262527 8804190 </code></pre>
+</div>
+</div>
+<p>The population information in both data sets have no missing values and the target data set is used as reference table which leads us to have the same population observations for both data set. Therefore, the summary statistics of population variable for both data sets are identical to each other. This data set has a wide range of population values, as indicated by the large difference between the minimum and maximum values. The city with the minimum population is Conroe, TX and the city with the maximum population is New York, NY. The mean population (293,392) is higher than the median population (155,984), suggesting that the distribution of population might be right-skewed because the data lies towards the lower end of the distribution while fewer very high values are pulling the mean upwards. The interquartile range, which represents the middle 50% of the data, is from 116,317 to 262,527.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'gridExtra'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset1</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>plot_pop1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t1, <span class="fu">aes</span>(<span class="at">x =</span> population)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population Distribution for Data Set 1"</span>, </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Population"</span>, </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>plot_pop2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t2, <span class="fu">aes</span>(<span class="at">x =</span> population)) <span class="sc">+</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population Distribution for Data Set 2"</span>, </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Population"</span>, </span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span> </span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot_pop1, plot_pop2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Since we know the distributions of population variable is the same for both data sets, their histogram plots are exactly the same. We can see from the plots that the distribution is highly right-skewed which we also stated in the summary statistics of the population. This skewness suggests that the majority of cities in the data set have relatively low populations and there are some outliers on the higher end, suggesting that a few data points have significantly larger populations such as New York with 8804190 residents and Los Angeles with 3898747 residents. Because of the outliers, the range in the population values is significantly wide.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset2</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>plot_age1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t1, <span class="fu">aes</span>(<span class="at">x =</span> median_age)) <span class="sc">+</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"lightgreen"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Age Distribution - 1"</span>, <span class="at">x =</span> <span class="st">"Median Age"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span> </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>plot_age2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t2, <span class="fu">aes</span>(<span class="at">x =</span> median_age)) <span class="sc">+</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">"lightgreen"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">bins =</span> <span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Median Age Distribution - 2"</span>, <span class="at">x =</span> <span class="st">"Median Age"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span> </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot_age1, plot_age2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Although median_age has missing values in both data frames and they are imputed, we get exactly the same distribution for both. The range of median_age is approximately between 23 and 47. The distribution seems to be similar to a normal distribution because of its peak at the center and the symmetric behavior around the center although there are some fluctuations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Correlation</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset1</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>corrplot 0.92 loaded</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>correlation_matrix1 <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">select</span>(knn_impute_t1, <span class="fu">where</span>(is.numeric)))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(correlation_matrix1, <span class="at">method =</span> <span class="st">"circle"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We plot the correlation matrix to see if there are highly correlated variables. Male and female features have a high negative correlation which is expected because when one of them increases, the other one decreases since they are percentages and their sum equals to 1. Hispanic feature is positively correlated with average household size and foreign born percentage. The relationship between Hispanic percentage and average household size might be due to cultural norms like having extended family in the same house. Hispanic and foreign born percentages might reflect the immigration patterns in the analysed cities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset2</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>correlation_matrix2 <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">select</span>(knn_impute_t2, <span class="fu">where</span>(is.numeric)))</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(correlation_matrix2, <span class="at">method =</span> <span class="st">"circle"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Male and female features have highly negative correlations because of the same reason as the previous correlation matrix. Economic features have high positive correlations with each other such as average income vs cost of living or average price vs median rent. The reason why this happens is the areas with higher average incomes often attract businesses offering higher-priced goods and services, leading to an overall higher cost of living in those areas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset1</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>plot_price1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t1, <span class="fu">aes</span>(<span class="at">x =</span> population, <span class="at">y =</span> avg_price)) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population vs. Average Price"</span>, <span class="at">x =</span> <span class="st">"Population"</span>, <span class="at">y =</span> <span class="st">"Average Price"</span>)<span class="sc">+</span><span class="fu">theme_bw</span>()</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset2</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>plot_price2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(knn_impute_t2, <span class="fu">aes</span>(<span class="at">x =</span> population, <span class="at">y =</span> avg_price)) <span class="sc">+</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population vs. Average Price"</span>, <span class="at">x =</span> <span class="st">"Population"</span>, <span class="at">y =</span> <span class="st">"Average Price"</span>)<span class="sc">+</span><span class="fu">theme_bw</span>()</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot_price1, plot_price2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The points are heavily clustered at the lower end of both x-axis and y-axis, indicating that most of the observations have smaller populations and lower average prices. There are a few observations with larger populations and very high average prices which we know the examples like New York (the highest) and Los Angeles (the second highest).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset1</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(<span class="sc">~</span>population <span class="sc">+</span> median_age <span class="sc">+</span> male <span class="sc">+</span> female, <span class="at">data =</span> knn_impute_t1)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For dataset2</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>plot_mat2 <span class="ot">&lt;-</span> <span class="fu">pairs</span>(<span class="sc">~</span>population <span class="sc">+</span> median_age <span class="sc">+</span> male <span class="sc">+</span> female, <span class="at">data =</span> knn_impute_t2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The matrix of scatter plots that shows the patterns between population, median age, female percentage, male percentage and gives insights about their relationship. For example, the scatter plot between median age and male looks to have randomly scattered points and there is no clear trend which indicates there is no strong linear relationship between those variables. However, the scatter plot of female and male shows significant negative relationsip. The scatter plots that have population variable seems to have skewness which prevents us to analyse it in detail because of its extreme outliers such as New York population.</p>
+</section>
+<section id="modelling" class="level3">
+<h3 class="anchored" data-anchor-id="modelling">Modelling</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ broom        1.0.5      ✔ rsample      1.2.1 
+✔ dials        1.2.1      ✔ tune         1.2.0 
+✔ infer        1.0.7      ✔ workflows    1.1.4 
+✔ modeldata    1.3.0      ✔ workflowsets 1.1.0 
+✔ parsnip      1.2.1      ✔ yardstick    1.3.1 
+✔ recipes      1.0.10     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ gridExtra::combine() masks dplyr::combine()
+✖ scales::discard()    masks purrr::discard()
+✖ dplyr::filter()      masks stats::filter()
+✖ recipes::fixed()     masks stringr::fixed()
+✖ dplyr::lag()         masks stats::lag()
+✖ recipes::prepare()   masks VIM::prepare()
+✖ yardstick::spec()    masks readr::spec()
+✖ recipes::step()      masks stats::step()
+• Use suppressPackageStartupMessages() to eliminate package startup messages</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>) </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>pop_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(knn_impute_t1,</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">prop =</span> <span class="fl">0.9</span>, </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">strata =</span> population)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>pop_train <span class="ot">&lt;-</span> pop_split <span class="sc">|&gt;</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">training</span>()</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>pop_test <span class="ot">&lt;-</span> pop_split <span class="sc">|&gt;</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">testing</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset 2</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>pop_split2 <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(knn_impute_t2, </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">prop =</span> <span class="fl">0.9</span>, </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">strata =</span> population)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>pop_train_2 <span class="ot">&lt;-</span> pop_split2 <span class="sc">|&gt;</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a> <span class="fu">training</span>()</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>pop_test_2 <span class="ot">&lt;-</span> pop_split2 <span class="sc">|&gt;</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">testing</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We split the data sets into train and test by 0.9 split ratio and using stratified sampling for population.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model 1 (linear regression)</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>population_parsnip_1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>population_workflow_1 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(population_parsnip_1) <span class="sc">|&gt;</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(population <span class="sc">~</span> .)</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a><span class="co"># model 2 (linear regression with PCA)</span></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>population_recipe_2 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(population <span class="sc">~</span> .,</span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>                              <span class="at">data =</span> pop_train) <span class="sc">|&gt;</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_numeric_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) </span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>population_recipe_2_2 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(population <span class="sc">~</span> .,</span>
+<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">data =</span> pop_train_2) <span class="sc">|&gt;</span></span>
+<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_numeric_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-22"><a href="#cb56-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) </span>
+<span id="cb56-23"><a href="#cb56-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-24"><a href="#cb56-24" aria-hidden="true" tabindex="-1"></a>population_workflow_2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-25"><a href="#cb56-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(population_parsnip_1) <span class="sc">|&gt;</span></span>
+<span id="cb56-26"><a href="#cb56-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(population_recipe_2)</span>
+<span id="cb56-27"><a href="#cb56-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-28"><a href="#cb56-28" aria-hidden="true" tabindex="-1"></a>population_workflow_2_2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-29"><a href="#cb56-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(population_parsnip_1) <span class="sc">|&gt;</span></span>
+<span id="cb56-30"><a href="#cb56-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(population_recipe_2_2)</span>
+<span id="cb56-31"><a href="#cb56-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-32"><a href="#cb56-32" aria-hidden="true" tabindex="-1"></a><span class="co"># model 3 (linear regression with penalty 0.5)</span></span>
+<span id="cb56-33"><a href="#cb56-33" aria-hidden="true" tabindex="-1"></a>population_recipe_3 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(population <span class="sc">~</span> .,</span>
+<span id="cb56-34"><a href="#cb56-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> pop_train) <span class="sc">|&gt;</span></span>
+<span id="cb56-35"><a href="#cb56-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb56-36"><a href="#cb56-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_numeric_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">30</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-37"><a href="#cb56-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) </span>
+<span id="cb56-38"><a href="#cb56-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-39"><a href="#cb56-39" aria-hidden="true" tabindex="-1"></a>population_recipe_3_2 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(population <span class="sc">~</span> .,</span>
+<span id="cb56-40"><a href="#cb56-40" aria-hidden="true" tabindex="-1"></a>                         <span class="at">data =</span> pop_train_2) <span class="sc">|&gt;</span></span>
+<span id="cb56-41"><a href="#cb56-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb56-42"><a href="#cb56-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_numeric_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">30</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-43"><a href="#cb56-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) </span>
+<span id="cb56-44"><a href="#cb56-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-45"><a href="#cb56-45" aria-hidden="true" tabindex="-1"></a>population_parsnip_3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fl">0.5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb56-46"><a href="#cb56-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-47"><a href="#cb56-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
+<span id="cb56-48"><a href="#cb56-48" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb56-49"><a href="#cb56-49" aria-hidden="true" tabindex="-1"></a>population_workflow_3 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-50"><a href="#cb56-50" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_model</span>(population_parsnip_3) <span class="sc">|&gt;</span></span>
+<span id="cb56-51"><a href="#cb56-51" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_recipe</span>(population_recipe_3)</span>
+<span id="cb56-52"><a href="#cb56-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-53"><a href="#cb56-53" aria-hidden="true" tabindex="-1"></a>population_workflow_3_2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-54"><a href="#cb56-54" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_model</span>(population_parsnip_3) <span class="sc">|&gt;</span></span>
+<span id="cb56-55"><a href="#cb56-55" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_recipe</span>(population_recipe_3_2)</span>
+<span id="cb56-56"><a href="#cb56-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-57"><a href="#cb56-57" aria-hidden="true" tabindex="-1"></a><span class="co"># model 4 (kknn with 5 neighbors)</span></span>
+<span id="cb56-58"><a href="#cb56-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-59"><a href="#cb56-59" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kknn)</span>
+<span id="cb56-60"><a href="#cb56-60" aria-hidden="true" tabindex="-1"></a>population_parsnip_4 <span class="ot">&lt;-</span> <span class="fu">nearest_neighbor</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-61"><a href="#cb56-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-62"><a href="#cb56-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"kknn"</span>, <span class="at">neighbors =</span> <span class="dv">5</span>)</span>
+<span id="cb56-63"><a href="#cb56-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-64"><a href="#cb56-64" aria-hidden="true" tabindex="-1"></a>population_workflow_4 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-65"><a href="#cb56-65" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_model</span>(population_parsnip_4) <span class="sc">|&gt;</span></span>
+<span id="cb56-66"><a href="#cb56-66" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_formula</span>(population <span class="sc">~</span> .)</span>
+<span id="cb56-67"><a href="#cb56-67" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb56-68"><a href="#cb56-68" aria-hidden="true" tabindex="-1"></a><span class="co">#model 5</span></span>
+<span id="cb56-69"><a href="#cb56-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ranger)</span>
+<span id="cb56-70"><a href="#cb56-70" aria-hidden="true" tabindex="-1"></a>population_parsnip_5 <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb56-71"><a href="#cb56-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-72"><a href="#cb56-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>)</span>
+<span id="cb56-73"><a href="#cb56-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-74"><a href="#cb56-74" aria-hidden="true" tabindex="-1"></a>population_workflow_5<span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-75"><a href="#cb56-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(population_parsnip_5) <span class="sc">|&gt;</span></span>
+<span id="cb56-76"><a href="#cb56-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_formula</span>(population <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We create the workflows for five different models: linear regression, linear regression with PCA, linear regression with penaly 0.5, k-nearest neighbors with 5 neighbors and random forest.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>workflow_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lm"</span>, </span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"lm_PCA"</span>,</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"lm_PCA_lasso"</span>,</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"knn"</span>,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"rf"</span>)</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>workflow_objects <span class="ot">&lt;-</span> <span class="fu">list</span>(population_workflow_1,</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>                         population_workflow_2,</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>                         population_workflow_3,</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>                         population_workflow_4,</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>                         population_workflow_5)</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>workflow_objects_2 <span class="ot">&lt;-</span> <span class="fu">list</span>(population_workflow_1,</span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>                           population_workflow_2_2,</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>                           population_workflow_3_2,</span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>                           population_workflow_4,</span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>                           population_workflow_5)</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>workflows_tbl <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">work_names =</span> workflow_names,</span>
+<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>                        <span class="at">work_objects =</span> workflow_objects)</span>
+<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a>workflows_tbl_2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">work_names =</span> workflow_names,</span>
+<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>                          <span class="at">work_objects =</span> workflow_objects_2)</span>
+<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a>workflows_tbl <span class="ot">&lt;-</span> workflows_tbl <span class="sc">|&gt;</span></span>
+<span id="cb57-28"><a href="#cb57-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb57-29"><a href="#cb57-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fits =</span> <span class="fu">list</span>(<span class="fu">fit</span>(work_objects,pop_train))) <span class="sc">|&gt;</span></span>
+<span id="cb57-30"><a href="#cb57-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">predictions =</span> <span class="fu">list</span>(<span class="fu">predict</span>(fits, pop_test)))</span>
+<span id="cb57-31"><a href="#cb57-31" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(workflows_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+# Rowwise: 
+  work_names   work_objects fits       predictions      
+  &lt;chr&gt;        &lt;list&gt;       &lt;list&gt;     &lt;list&gt;           
+1 lm           &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+2 lm_PCA       &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+3 lm_PCA_lasso &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+4 knn          &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+5 rf           &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>workflows_tbl_2 <span class="ot">&lt;-</span> workflows_tbl_2 <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fits =</span> <span class="fu">list</span>(<span class="fu">fit</span>(work_objects, pop_train_2))) <span class="sc">|&gt;</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">predictions =</span> <span class="fu">list</span>(<span class="fu">predict</span>(fits, pop_test_2)))</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(workflows_tbl_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+# Rowwise: 
+  work_names   work_objects fits       predictions      
+  &lt;chr&gt;        &lt;list&gt;       &lt;list&gt;     &lt;list&gt;           
+1 lm           &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+2 lm_PCA       &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+3 lm_PCA_lasso &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+4 knn          &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;
+5 rf           &lt;workflow&gt;   &lt;workflow&gt; &lt;tibble [36 × 1]&gt;</code></pre>
+</div>
+</div>
+<p>We create data frames for both data sets with each model (workflow), their fits to training data and their predictions by creating list typed columns. Therefore, we can store all the information about the models and predictions in the same data frame for further analysis and comparison.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">#check the performance </span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>predictions_tbl  <span class="ot">&lt;-</span> workflows_tbl <span class="sc">|&gt;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(work_names, </span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>        predictions) <span class="sc">|&gt;</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">unnest</span>(predictions) <span class="sc">|&gt;</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">cbind</span>(<span class="at">population =</span> pop_test <span class="sc">|&gt;</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>         <span class="fu">pull</span>(population))</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(predictions_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  work_names     .pred population
+1         lm 1400263.4    1304379
+2         lm 1350797.5     961855
+3         lm 2110713.4     949611
+4         lm  589347.6     905748
+5         lm 1854553.2     689447
+6         lm  494104.9     641903</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>predictions_tbl_2  <span class="ot">&lt;-</span> workflows_tbl_2 <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(work_names, </span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>        predictions) <span class="sc">|&gt;</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">unnest</span>(predictions) <span class="sc">|&gt;</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">cbind</span>(<span class="at">population =</span> pop_test <span class="sc">|&gt;</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">pull</span>(population))</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(predictions_tbl_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  work_names     .pred population
+1         lm 1318626.9    1304379
+2         lm 1182906.6     961855
+3         lm 1976973.7     949611
+4         lm  728884.7     905748
+5         lm 1553363.6     689447
+6         lm  854656.1     641903</code></pre>
+</div>
+</div>
+<p>We unnest the predictions column we created in the previous step to compare the predicted population with the actual population.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>predictions_tbl <span class="sc">|&gt;</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> population, </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> .pred)) <span class="sc">+</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>work_names, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Actual"</span>) <span class="sc">+</span></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Prediction"</span>) <span class="sc">+</span></span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_obs_pred</span>() <span class="sc">+</span> </span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>predictions_tbl_2 <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> population, </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> .pred)) <span class="sc">+</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>work_names, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Actual"</span>) <span class="sc">+</span></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Prediction"</span>) <span class="sc">+</span></span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_obs_pred</span>() <span class="sc">+</span> </span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-22-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The data points in KNN and random forest seem to be clustered closer to the line of perfect prediction, especially for lower and mid-range values. The other models (linear model, linear model with PCA and linear model with penaly) have similar spreads but here are some outliers. This suggests that these models have reasonable degree of accuracy, but the relationship between the variables might not be strictly linear which leads the rf and knn to have better prediction rather than the linear models. For both data set 1 and data set 2, the comparisons between the models are similar according to this visualization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check the performance</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>population_metrics <span class="ot">&lt;-</span> <span class="fu">metric_set</span>(yardstick<span class="sc">::</span>rmse, </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>                                 rsq, </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>                                 yardstick<span class="sc">::</span>mae)</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">50</span>)</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>predictions_metrics <span class="ot">&lt;-</span> predictions_tbl <span class="sc">|&gt;</span></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(work_names) <span class="sc">|&gt;</span></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_metrics</span>(<span class="at">truth =</span> population, </span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">estimate =</span> .pred) <span class="sc">|&gt;</span></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.estimate =</span> (<span class="fu">round</span>(.estimate, <span class="dv">2</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_set =</span> <span class="dv">1</span>)</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>predictions_metrics_2 <span class="ot">&lt;-</span> predictions_tbl_2 <span class="sc">|&gt;</span></span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(work_names) <span class="sc">|&gt;</span></span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">population_metrics</span>(<span class="at">truth =</span> population, </span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">estimate =</span> .pred) <span class="sc">|&gt;</span></span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.estimate =</span> (<span class="fu">round</span>(.estimate, <span class="dv">2</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_set =</span> <span class="dv">2</span>)</span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> predictions_metrics <span class="sc">|&gt;</span></span>
+<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(predictions_metrics_2,</span>
+<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"work_names"</span>, <span class="st">".metric"</span>, <span class="st">".estimator"</span>, <span class="st">"data_set"</span>, <span class="st">".estimate"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb67-24"><a href="#cb67-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_set =</span> <span class="fu">as.factor</span>(data_set))</span>
+<span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  work_names   .metric .estimator .estimate data_set
+  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;fct&gt;   
+1 knn          rmse    standard   215716.   1       
+2 lm           rmse    standard   896889.   1       
+3 lm_PCA       rmse    standard   908625.   1       
+4 lm_PCA_lasso rmse    standard   902237.   1       
+5 rf           rmse    standard   175559.   1       
+6 knn          rsq     standard        0.63 1       </code></pre>
+</div>
+</div>
+<p>We calculate the model perforamances numerically by using root mean squared error, r-squared and mean absolute error. We create a new data fram that includes both data frames’ performance metrics to store and use them later in the visualizations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># YOUR CODE HERE</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="sc">|&gt;</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> work_names,</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> data_set,</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> .estimate)) <span class="sc">+</span></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>.metric,</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">scales =</span> <span class="st">"free_x"</span>) <span class="sc">+</span> </span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>) <span class="sc">+</span></span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Model"</span>) <span class="sc">+</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Performance Estimate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The random forest model has the lowest MAE and RMSE in both data sets, indicating it has the most accurate predictions. It also has the highest R² score in both data sets, suggesting it explains the variance in the target variable the best. The KNN model shows MAE and RMSE higher than the random forest but lower than the linear models. This indicates poorer performance than the random forest model. Also, the second data set with more features seems to have worse performance in KNN model than the data set with less features and less missing values. The linear models perform similarly and they have higher error metrics (mae and rmse) and lower r-squared value than random forest and knn. The linear model with PCA performs similarly to the linear model on MAE and RMSE but has a slightly lower <span class="math inline">\(R^2\)</span>, suggesting that while the errors are comparable, the explanation of variance is slightly worse. Also, the model with both PCA and penalty (lm_PCA_lasso) has slightly a lower MAE and RMSE than lm_PCA and lm, indicating better predictive performance. The <span class="math inline">\(R^2\)</span> is also generally higher than both lm_PCA and lm, but it is not the highest. Based on the metrics mean absolute error, root mean squared error and <span class="math inline">\(R^2\)</span>, random forest is the best performing model for both data sets because it consistently has the lowest errors (MAE and RMSE) and the highest <span class="math inline">\(R^2\)</span> scores, indicating higher accuracy and predictive power.</p>
+<p>Random forest has the potential of capturing the complex patterns better rather than the linear models or KNN. The second data set has more features (24 features) than the first data set (13 features) which provides the random forest model with more information to learn from and potentially leading to better performance. KNN is a nonparametric model like random forest which explains why it performs better than the linear models and can capture non-linear relationships between features and the target variable. However, it performs worse than random forest because random forest is more robust, handles high-dimensional data better, and can capture more complex patterns due to being an ensemble of many decision trees. Except lack of the ability of detecting the nonlinear patterns, the linear models are more sensitive to outliers than random forest and KNN, which can significantly affect model performance metrics. Also, linear models are more sensitive to multicollinearity which occurs in our model because of the high correlations we showed in EDA part. Although PCA can help with reducing the effect of multicollinearity, it might also remove some variance from the model which eventually causes less prediction power.</p>
+<p>Overall, we prefer to continue with the random forest using the second data set with more features because of its high predictive power and low error metrics.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#PCA</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co">#standardize the data</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>scaled_data1 <span class="ot">&lt;-</span> <span class="fu">scale</span>(knn_impute_t1)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>pca_result1 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(scaled_data1, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(knn_impute_t1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   333 obs. of  14 variables:
+ $ population            : num  8804190 3898747 2746388 2304580 1608139 ...
+ $ land_area_km2         : num  778 1216 590 1659 1342 ...
+ $ median_age            : num  36 35 34.2 32.6 33.8 34.1 33.1 34.5 32.6 32.7 ...
+ $ male                  : num  0.477 0.493 0.485 0.5 0.503 ...
+ $ female                : num  0.523 0.507 0.515 0.5 0.497 ...
+ $ average_household_size: num  2.68 2.86 2.53 2.66 2.89 2.61 2.93 2.73 2.59 2.5 ...
+ $ white                 : num  0.387 0.427 0.423 0.443 0.56 ...
+ $ american              : num  0.01497 0.02185 0.01242 0.00754 0.04583 ...
+ $ hispanic              : num  0.415 0.678 0.424 0.594 0.771 ...
+ $ black                 : num  0.627 0.441 0.817 0.753 0.667 ...
+ $ asian                 : num  1 1 1 1 1 ...
+ $ perc_veterans         : num  0.0184 0.0215 0.0265 0.0313 0.0463 ...
+ $ perc_foreign_born     : num  0.376 0.374 0.211 0.303 0.192 ...
+ $ avg_price             : num  2985802 2378753 505871 542926 613359 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(knn_impute_t2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   333 obs. of  25 variables:
+ $ population            : num  8804190 3898747 2746388 2304580 1608139 ...
+ $ land_area_km2         : num  778 1216 590 1659 1342 ...
+ $ median_age            : num  36 35 34.2 32.6 33.8 34.1 33.1 34.5 32.6 32.7 ...
+ $ male                  : num  0.477 0.493 0.485 0.5 0.503 ...
+ $ female                : num  0.523 0.507 0.515 0.5 0.497 ...
+ $ average_household_size: num  2.68 2.86 2.53 2.66 2.89 2.61 2.93 2.73 2.59 2.5 ...
+ $ white                 : num  0.387 0.427 0.423 0.443 0.56 ...
+ $ american              : num  0.01497 0.02185 0.01242 0.00754 0.04583 ...
+ $ hispanic              : num  0.415 0.678 0.424 0.594 0.771 ...
+ $ black                 : num  0.627 0.441 0.817 0.753 0.667 ...
+ $ asian                 : num  1 1 1 1 1 ...
+ $ perc_veterans         : num  0.0184 0.0215 0.0265 0.0313 0.0463 ...
+ $ perc_foreign_born     : num  0.376 0.374 0.211 0.303 0.192 ...
+ $ region                : Factor w/ 4 levels "Midwest","Northeast",..: 2 4 1 3 4 2 3 4 3 3 ...
+ $ size                  : Factor w/ 3 levels "Large","Mid-Sized",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ avg_rent              : num  3272 2857 1975 1620 1755 ...
+ $ median_rent           : num  2323 1925 1364 1216 1584 ...
+ $ unemp_rate            : num  3.8 3.9 4.2 3.9 2.7 3.4 3.3 2.9 3.2 2.7 ...
+ $ avg_income            : num  85136 75821 71992 64837 58308 ...
+ $ cost_of_living        : num  128 140.6 100.1 95.8 104.3 ...
+ $ price_parity          : num  114.6 113.8 105.4 99.7 99.2 ...
+ $ commute_time          : num  36.7 30.7 31.8 30 26.4 29.8 26.7 26 28.6 27.1 ...
+ $ median_aqi            : num  50 70 50 57 77 48 51 49 51 45 ...
+ $ transit_score         : num  6.9 6.2 5.1 2.8 4.1 5.3 4.5 5.3 2.8 2.8 ...
+ $ avg_price             : num  2985802 2378753 505871 542926 613359 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>numeric_data2 <span class="ot">&lt;-</span> <span class="fu">select</span>(knn_impute_t2, <span class="fu">where</span>(is.numeric))</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>scaled_data2 <span class="ot">&lt;-</span> <span class="fu">scale</span>(numeric_data2)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>pca_result2 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(scaled_data2, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract principal components</span></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>pcs1 <span class="ot">&lt;-</span> pca_result1<span class="sc">$</span>x</span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>pcs2 <span class="ot">&lt;-</span> pca_result2<span class="sc">$</span>x</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract standard deviations</span></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>std_dev1 <span class="ot">&lt;-</span> pca_result1<span class="sc">$</span>sdev</span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>std_dev2 <span class="ot">&lt;-</span> pca_result2<span class="sc">$</span>sdev</span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract proportion of variance explained by each PC</span></span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>variance_explained1 <span class="ot">&lt;-</span> pca_result1<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_result1<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>variance_data1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(variance_explained1),</span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variance_Explained =</span> variance_explained1</span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a>variance_explained2 <span class="ot">&lt;-</span> pca_result2<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="fu">sum</span>(pca_result2<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb74-22"><a href="#cb74-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-23"><a href="#cb74-23" aria-hidden="true" tabindex="-1"></a>variance_data2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb74-24"><a href="#cb74-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">PC =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(variance_explained2),</span>
+<span id="cb74-25"><a href="#cb74-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variance_Explained =</span> variance_explained2</span>
+<span id="cb74-26"><a href="#cb74-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb74-27"><a href="#cb74-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-28"><a href="#cb74-28" aria-hidden="true" tabindex="-1"></a>variance_data1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   PC                      Variance_Explained
+1   1 0.2363605666320214293563140017795376480
+2   2 0.1755972206749699116024032718996750191
+3   3 0.1213850646959739876251660462003201246
+4   4 0.1048547470812545984175656599290960003
+5   5 0.0881161707897927387600489623764588032
+6   6 0.0680768184633943757022578324722417165
+7   7 0.0586244467955225681543574012266617501
+8   8 0.0410028179261506253716618175531039014
+9   9 0.0326194437246190502288634149863355560
+10 10 0.0277736315828713449527231915681113605
+11 11 0.0180531545855585062732018286624224856
+12 12 0.0148635325434497787139287439117651957
+13 13 0.0126723845044209009608193738927184313
+14 14 0.0000000000000000000000000000001947387</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>variance_data2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   PC                      Variance_Explained
+1   1 0.3559188033789904559434091879666084424
+2   2 0.1112590053356797836769942477985750884
+3   3 0.0907847627085378999778342290483124088
+4   4 0.0761347546572226918648595983540872112
+5   5 0.0603109308119327974795353952686127741
+6   6 0.0477552892452818567026184837231994607
+7   7 0.0421003023877854418155486371233564569
+8   8 0.0399478834682952602119776486233604373
+9   9 0.0331919774115089633026443038943398278
+10 10 0.0254600952790785504953330331545657828
+11 11 0.0233268677158172954566595080905244686
+12 12 0.0173061443284808977316480138597398764
+13 13 0.0155462590028131574654279845049131836
+14 14 0.0117755795996509707995736349062099180
+15 15 0.0107067042716172695221432675793948874
+16 16 0.0097516166669055753118966478609763726
+17 17 0.0085192617620656954646740643966040807
+18 18 0.0078068552029792242716310646244437521
+19 19 0.0053417862417160909965785364761359233
+20 20 0.0032545391631230240724048652367628165
+21 21 0.0023667781006308967819973254620435910
+22 22 0.0014338032598864617304934565567009486
+23 23 0.0000000000000000000000000000001037526</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>combined_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(variance_data1, variance_data2, <span class="at">.id =</span> <span class="st">"Table"</span>)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(combined_table, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(PC), <span class="at">y =</span> Variance_Explained, <span class="at">fill =</span> <span class="fu">factor</span>(Table))) <span class="sc">+</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Variance Explained Plot"</span>,</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Component (PC)"</span>,</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Variance Explained"</span>,</span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Dataset"</span>) <span class="sc">+</span></span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="STAT5125_FinalProject_Lau_Bekircan_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For the Variance Explained Plot, it is the results of Principal Component Analysis for two data sets, each with their corresponding principal components and the variance explained by each PC.</p>
+<p>In the ggplot, each bar represents a principal component and the height of the bar represents the proportion of variance explained by that PC. The data set 1 has 14 principal components, while the second data set has 23 principal components. The first principal component explains approximately 23.64% of the total variability in the data while PC2 explains approximately 17.56%. For data set 2, PC1 explains approximately 35.52% of the total variability, PC2 explains approximately 11.12%.</p>
+<p>The variance explained by each principal component provides insight into the underlying structure of the data sets. A higher proportion of variance explained by a component indicates that it captures more information about the variability in the data. It provides valuable insights into the structure and variability of high-dimensional data sets. By identifying the principal components that contribute most to the variance, we can reduce the data set’s dimensionality while retaining essential information.</p>
+<p>To compare two datasets, Dataset 2 explains a higher proportion of variance with PC1 compared to Dataset 1. However, Dataset1 has a higher proportion of variance explained by PC2. Dataset 1 (14) has fewer principal components compared to Dataset 2 (23).</p>
+<p>Considering these factors, this means that dataset 1 requires less computational resources and may be more straightforward to analyze, especially if efficiency and simplicity are important considerations. Fewer principal components also mean simpler model interpretation and potentially less overfitting, which can lead to more robust and generalizable results.</p>
+<p>While dataset 1 has fewer principal components, Dataset 2 explains a higher proportion of variance with PC1 compared to Dataset 1. This suggests that dataset 2 captures more information about the underlying stricture and variability of the data in its first principal component. Capturing a higher proportion of variance can be advantageous if the goal is to retain as much information as possible in the reduced-dimensional space.</p>
+<p>Therefore, there is trade-offs between dimensionality reduction efficiency and capturing variance on dataset 1 and dataset 2.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">CONCLUSION</h2>
+<p>In this project, we explored various machine learning models to predict population based on several features. We employed linear regression , linear regression with PCA, linear regression with penalty, k-nearest neighbors and random forest models. Through extensive analysis and comparison, we found that random forest consistently outperformed other models in terms of predictive accuracy, as evidenced by its lower mean absolute error (MAE), root mean squared error (RMSE), and higher R-squared values.</p>
+<p>Interestingly, the random forest and k-nearest neighbors model demonstrated better performance compared to linear regression -based models. This suggests that the relationship between the predictors and the target variable might not be strictly linear, and these non- linear models are better suited capture complex patterns in the data.</p>
+<p>Additionally, the second dataset, which contained more features, provided the random forest models with more information to learn from, resulting in better performance compared to the first dataset. However, it is important to note that the increased dimensionality of the second dataset may also introduce challenges such as increased computational complexity and potential overfitting.</p>
+<p>For future exploration, it would be benficial to delve deeper into feature engineering and selection techniques to further improve model performance. Additionally, exploring advanced ensemble techniques and model tuning could help squeeze out addition performance gains. Furthermore, investigating the impact of different imputation methods for handling missing data and evaluating the robustness o the models across different population demographics could provide valuable insights.</p>
+<p>In conclusion,based on the comprehensive evaluation of model performance and considering future exploratory directions, we have selected the random forest model trained on the second dataset with more features as the preferred model for this project. Its superior predictive accuracy and ability to capture complex relationships make it the optimal choice for population prediction in this context.</p>
+<p>Add-On’s:</p>
+<ul>
+<li><p>Perform Principal Component Analysis</p></li>
+<li><p>Impute Missing Data</p></li>
+<li><p>Clean Data Using a Regular expression</p></li>
+<li><p>Make a Github Repository</p></li>
+<li><p>Scrape Data From Online</p></li>
+<li><p>Make use of a list column during your analysis</p></li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
